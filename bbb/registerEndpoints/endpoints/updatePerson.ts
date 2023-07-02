@@ -1,28 +1,29 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import { IPerson } from '../../../api';
+import { IPerson } from "../../../api";
 import { db } from '../../init';
-import { personsTbl } from '../../../constants';
+import { personsTbl } from "../../../constants";
 
-export const createPerson = async (req: Request, res: Response) => {
+export const updatePerson = async(req: Request, res: Response) => {
     const {
+        id,
         lastRecords,
         address,
         records,
         ...person
-    }: Omit<IPerson, 'id'> = req.body;
+    }: IPerson = req.body;
 
     try {
         await db(personsTbl)
-            .insert({
+            .update({
                 ...person,
-                ...address,
                 lastRecords: JSON.stringify(lastRecords),
                 updatedAt: Object.values(lastRecords).reduce((max, { date }) => max.getTime() > date.getTime() ? max : date, new Date())
             })
+            .where({ id })
     } catch (message) {
         return console.error(message);
     }
 
     return res.end();
-};
+}

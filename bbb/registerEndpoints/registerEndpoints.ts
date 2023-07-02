@@ -1,10 +1,12 @@
-import { createUrl, personsUrl, serviceUrl } from "../../constants/urls";
+import { createUrl, personsUrl, serviceUrl, updateUrl, getUrl } from "../../constants";
 
 import { app } from '../index';
 
-import { createPerson, queryPersons } from "./endpoints";
+import { createPerson, getPerson, queryPersons, updatePerson } from "./endpoints";
 
 export const registerEndpoints = () => {
     app.get(`${serviceUrl}${personsUrl}`, queryPersons);
+    app.post(`${serviceUrl}${personsUrl}${getUrl}`, getPerson);
     app.post(`${serviceUrl}${personsUrl}${createUrl}`, createPerson);
+    app.post(`${serviceUrl}${personsUrl}${updateUrl}`, updatePerson);
 };
