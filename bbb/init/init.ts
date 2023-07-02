@@ -50,7 +50,7 @@ Promise.all([
                 table.string('clinic').notNullable().defaultTo('');
                 table.string('author').notNullable().defaultTo('');
                 table.integer('personId').notNullable();
-                table.datetime('date').notNullable().defaultTo(new Date());
+                table.datetime('date').notNullable().defaultTo(new Date().toISOString());
                 table.enum('reason', Object.values(RecordType)).notNullable().defaultTo('');
                 Object.keys(BodyDamageInfo).forEach(key => {
                     table.boolean(BodyDamageInfo[key]);
@@ -137,7 +137,7 @@ Promise.all([
                 table.string('fullDiagnosis').notNullable().defaultTo('');
                 table.string('info').notNullable().defaultTo('');
                 table.string('recommendations').notNullable().defaultTo('');
-                table.datetime('date').notNullable().defaultTo(new Date());
+                table.datetime('date').notNullable().defaultTo(new Date().toISOString());
                 table.string('doctor').notNullable().defaultTo('');
             })
             .then(handleCreateSuccess('discharges'))
@@ -155,7 +155,7 @@ Promise.all([
                 table.integer('personId').notNullable();
                 table.string('militaryBase').notNullable().defaultTo('');
                 table.string('code').notNullable().defaultTo('');
-                table.datetime('date').notNullable().defaultTo(new Date());
+                table.datetime('date').notNullable().defaultTo(new Date().toISOString());
                 table.string('militaryBaseAddress').notNullable().defaultTo('');
                 table.string('number').notNullable().defaultTo('');
                 table.string('receiver').notNullable().defaultTo('');
@@ -174,7 +174,7 @@ Promise.all([
             if (res) {
                 return;
             }
-            db.schema.createTableIfNotExists(conclusionsTbl, table => {
+            db.schema.createTable(conclusionsTbl, table => {
                 table.increments('id').primary();
                 table.integer('personId').notNullable();
                 table.string('sender').notNullable().defaultTo('');
@@ -183,7 +183,7 @@ Promise.all([
                 table.string('researchResults');
                 table.string('diagnosis').notNullable().defaultTo('');
                 table.string('recommendations');
-                table.datetime('date').notNullable().defaultTo(new Date());
+                table.datetime('date').notNullable().defaultTo(new Date().toISOString());
                 table.string('headOfTheClinic').notNullable().defaultTo('');
             })
             .then(handleCreateSuccess('conclusions'))
