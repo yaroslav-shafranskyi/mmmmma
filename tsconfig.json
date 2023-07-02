@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "esModuleInterop": true,
+      "target": "ES2021",
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "outDir": "dist",
+      "lib": ["esnext"],
+    },
+    "exclude": [
+        "node_modules",
+        "client"
+    ]
+}
