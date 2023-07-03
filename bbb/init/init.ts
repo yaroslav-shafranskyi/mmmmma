@@ -33,7 +33,10 @@ Promise.all([
                 table.string('appartments');
                 table.string('profession');
                 table.datetime('updatedAt');
-                table.json('lastRecords');
+                table.integer('lastForm100Id');
+                table.integer('lastConclusionId');
+                table.integer('lastDischargeId');
+                table.integer('lastReferralId');
             })
             .then(handleCreateSuccess('persons'))
             .catch(handleCreateError('persons'))
@@ -51,6 +54,7 @@ Promise.all([
                 table.string('author').notNullable().defaultTo('');
                 table.integer('personId').notNullable();
                 table.datetime('date').notNullable().defaultTo(new Date().toISOString());
+                table.datetime('accidentTime').notNullable();
                 table.enum('reason', Object.values(RecordType)).notNullable().defaultTo('');
                 Object.keys(BodyDamageInfo).forEach(key => {
                     table.boolean(BodyDamageInfo[key]);

@@ -8,12 +8,15 @@ import { IPlait } from './IPlait';
 import { RecordType } from './IRecord';
 import { SanitaryTreatmentStatus } from './SanitaryTreatmentStatus';
 
+export type Form100PersonData = Pick<IPerson, 'birthDate' | 'id' | 'fullName' | 'personalId' | 'tokenNumber' | 'rank' | 'gender' | 'militaryBase'>;
+
 export interface IForm100 {
     id: string;
     clinic: string;
     author: string;
-    person: IPerson;
+    person: Form100PersonData;
     date: Date;
+    accidentTime: Date;
     reason: RecordType;
     bodyImage: IBodyImage;
     bodyDamage: BodyDamageInfo[];
