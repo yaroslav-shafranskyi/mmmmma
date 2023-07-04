@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 
-import { BodyDamageInfo, EvacuationClinic, IForm100, IPerson } from '../../../api';
+import { BodyDamageInfo, EvacuationClinic, Forms, IForm100, IPerson } from '../../../api';
 import { db } from '../../init';
-import { personsTbl, forms100Tbl } from '../../../constants';
+import { personsTbl, forms100Tbl, briefsTbl } from '../../../constants';
 
 import { convertIPersonToTablePerson } from '../helpers';
 
@@ -98,6 +98,15 @@ export const createForm100 = async (req: Request, res: Response) => {
         await db(forms100Tbl)
             .update({ personId: newPersonId })
             .where({ id: newForm100Id });
+        
+        await db(briefsTbl)
+            .insert({
+                type: Forms.FORM_100,
+                formId: newForm100Id,
+                date,
+                fullDiagnosis: form100.fullDiagnosis,
+                personId: newPersonId,
+            });
 
     } catch (message) {
         return console.error(message);
