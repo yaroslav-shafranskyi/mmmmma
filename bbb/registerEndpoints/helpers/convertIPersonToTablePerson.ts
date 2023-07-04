@@ -17,7 +17,7 @@ export const convertIPersonToTablePerson = (person: PersonType) => {
         discharge: lastDischargeId,
         conclusion: lastConclusionId,
         referral: lastReferralId
-    } = lastRecords;
+    } = lastRecords ?? {};
 
     return {
         ...restPerson,
@@ -26,6 +26,6 @@ export const convertIPersonToTablePerson = (person: PersonType) => {
         lastDischargeId,
         lastConclusionId,
         lastReferralId,
-        updatedAt: Object.values(lastRecords).reduce((max, { date }) => max.getTime() > date.getTime() ? max : date, new Date())
+        updatedAt: Object.values(lastRecords ?? {}).reduce((max, { date }) => max.getTime() > date.getTime() ? max : date, new Date())
     };
 };

@@ -20,16 +20,21 @@ export type IConclusionRecord = Omit<IConclusion, 'person'>
 export interface IBriefRecord {
     date: Date;
     fullDiagnosis: string;
-    id: string;
+    id: number;
     type: Forms;
 }
 
+export interface IResponseBriefRecord extends IBriefRecord {
+    formId: number;
+    personId: number;
+}
+
 export interface ILastRecords {
-    form100?: IForm100Record;
-    brief?: IBriefRecord;
-    discharge?: IDischargeRecord;
-    referral?: IReferralRecord;
-    conclusion?: IConclusionRecord;
+    form100?: number;
+    brief?: number;
+    discharge?: number;
+    referral?: number;
+    conclusion?: number;
 }
 
 export interface IRecords {
