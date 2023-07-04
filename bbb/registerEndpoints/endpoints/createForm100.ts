@@ -11,54 +11,15 @@ import {
 import { db } from "../../init";
 import { personsTbl, forms100Tbl, briefsTbl } from "../../../constants";
 
-import { convertIPersonToTablePerson } from "../helpers";
+import {
+  convertIForm100ToTableForm100,
+  convertIPersonToTablePerson,
+} from "../helpers";
 
 const insertNewForm100ToTable = async (data: Omit<IForm100, "id">) => {
-  const {
-    person,
-    date,
-    accidentTime,
-    bodyImage,
-    bodyDamage,
-    injury,
-    medicalHelp,
-    plait,
-    evacuation,
-    ...form100
-  }: Omit<IForm100, "id"> = data;
+  const convertedData = convertIForm100ToTableForm100(data as IForm100);
 
-  const personId = person.id;
-
-  const tableBodyDamage = bodyDamage.reduce(
-    (_result: Record<BodyDamageInfo, boolean>, current) => ({
-      [current]: true,
-    }),
-    {}
-  );
-
-  const tableEvacuationClinics = evacuation.clinic.reduce(
-    (_res: Record<number, EvacuationClinic>, { order, clinic }) => ({
-      [order]: clinic,
-    }),
-    {}
-  );
-
-  await db(forms100Tbl).insert({
-    ...form100,
-    personId,
-    date,
-    accidentTime,
-    damageCoords: JSON.stringify(bodyImage),
-    ...tableBodyDamage,
-    ...injury,
-    ...medicalHelp?.operations,
-    ...medicalHelp?.treatments,
-    plait: plait?.date,
-    evacuationTransport: evacuation.transport,
-    evacuationType: evacuation.type,
-    evacuationPriority: evacuation.priority,
-    evacuationClinics: JSON.stringify(tableEvacuationClinics),
-  });
+  await db(forms100Tbl).insert(convertedData);
 };
 
 const updatePersonAfterFormCreating = async (form100: IForm100) => {
@@ -132,18 +93,8 @@ const updateFormsWithPersonId = async (
 };
 
 export const createForm100 = async (req: Request, res: Response) => {
-  const {
-    person,
-    date,
-    accidentTime,
-    bodyImage,
-    bodyDamage,
-    injury,
-    medicalHelp,
-    plait,
-    evacuation,
-    ...form100
-  }: Omit<IForm100, "id"> = req.body;
+  const { person, date, diagnosis, fullDiagnosis }: Omit<IForm100, "id"> =
+    req.body;
 
   const personId = person.id;
 
@@ -165,8 +116,8 @@ export const createForm100 = async (req: Request, res: Response) => {
   await updateFormsWithPersonId(
     {
       id: newForm100Id,
-      diagnosis: form100.diagnosis,
-      fullDiagnosis: form100.fullDiagnosis,
+      diagnosis: diagnosis,
+      fullDiagnosis: fullDiagnosis,
       date,
     },
     res

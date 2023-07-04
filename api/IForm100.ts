@@ -55,7 +55,7 @@ export interface IForm100 {
 }
 
 type DamageCoordType = { x: number; y: number };
-type DamageCoordsType = { front: DamageCoordType[]; back: DamageCoordType[] };
+export type DamageCoordsType = { front: DamageCoordType[]; back: DamageCoordType[] };
 
 export interface ITableForm100
   extends IForm100,
