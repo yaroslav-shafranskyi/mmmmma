@@ -40,6 +40,7 @@ export const convertTableForm100ToIForm100 = (
     evacuationPriority,
     evacuationTransport,
     evacuationType,
+    damageCoords,
     ...rest
   } = resForm100;
 
@@ -110,5 +111,6 @@ export const convertTableForm100ToIForm100 = (
       transport: evacuationTransport,
       type: evacuationType,
     },
+    bodyImage: damageCoords,
   };
 };

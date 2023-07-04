@@ -43,26 +43,22 @@ const insertNewForm100ToTable = async (data: Omit<IForm100, "id">) => {
     {}
   );
 
-  try {
-    await db(forms100Tbl).insert({
-      ...form100,
-      personId,
-      date,
-      accidentTime,
-      damageCoords: JSON.stringify(bodyImage),
-      ...tableBodyDamage,
-      ...injury,
-      ...medicalHelp?.operations,
-      ...medicalHelp?.treatments,
-      plait: plait?.date?.toISOString(),
-      evacuationTransport: evacuation.transport,
-      evacuationType: evacuation.type,
-      evacuationPriority: evacuation.priority,
-      evacuationClinics: JSON.stringify(tableEvacuationClinics),
-    });
-  } catch (error) {
-    console.error(error);
-  }
+  await db(forms100Tbl).insert({
+    ...form100,
+    personId,
+    date,
+    accidentTime,
+    damageCoords: JSON.stringify(bodyImage),
+    ...tableBodyDamage,
+    ...injury,
+    ...medicalHelp?.operations,
+    ...medicalHelp?.treatments,
+    plait: plait?.date,
+    evacuationTransport: evacuation.transport,
+    evacuationType: evacuation.type,
+    evacuationPriority: evacuation.priority,
+    evacuationClinics: JSON.stringify(tableEvacuationClinics),
+  });
 };
 
 const updatePersonAfterFormCreating = async (form100: IForm100) => {
@@ -156,9 +152,9 @@ export const createForm100 = async (req: Request, res: Response) => {
   const formsIds = await db(forms100Tbl)
     .select("id")
     .where({ personId })
-    .orderBy('id', 'desc')
+    .orderBy("id", "desc");
 
-    if (!formsIds?.length) {
+  if (!formsIds?.length) {
     return res.end();
   }
 

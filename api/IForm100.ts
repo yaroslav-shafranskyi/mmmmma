@@ -54,6 +54,9 @@ export interface IForm100 {
   firstAidInfo: string;
 }
 
+type DamageCoordType = { x: number; y: number };
+type DamageCoordsType = { front: DamageCoordType[]; back: DamageCoordType[] };
+
 export interface ITableForm100
   extends IForm100,
     IInjury,
@@ -69,4 +72,5 @@ export interface ITableForm100
   evacuationTransport: EvacuationTransport;
   evacuationType: EvacuationType;
   personId: number;
+  damageCoords?: DamageCoordsType;
 }
