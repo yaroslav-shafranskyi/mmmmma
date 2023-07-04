@@ -1,6 +1,10 @@
 import { IPerson } from "../../../api";
 
 export const convertTablePersonToIPerson = (tablePerson: Record<string, unknown>): IPerson => {
+    if (!tablePerson) {
+        return;
+    }
+    
     const { oblast, region, settlement, street, building, appartments, updatedAt, ...restFields } = tablePerson;
     
     return {

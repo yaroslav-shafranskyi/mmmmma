@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 
-import { BodyDamageInfo, EvacuationClinic, IForm100 } from '../../../api';
+import { BodyDamageInfo, EvacuationClinic, IForm100, IPerson } from '../../../api';
 import { db } from '../../init';
 import { personsTbl, forms100Tbl } from '../../../constants';
+
+import { convertIPersonToTablePerson } from '../helpers';
 
 export const createForm100 = async (req: Request, res: Response) => {
     const {
@@ -20,7 +22,7 @@ export const createForm100 = async (req: Request, res: Response) => {
 
     const personId = person.id;
 
-    const isNewPerson = personId === 'create';
+    const isNewPerson = personId === -1;
 
     const tableBodyDamage = bodyDamage.reduce((_result: Record<BodyDamageInfo, boolean>, current) => ({
         [current]: true,
@@ -33,8 +35,8 @@ export const createForm100 = async (req: Request, res: Response) => {
             .insert({
                 ...form100,
                 personId,
-                date: date.toISOString(),
-                accidentTime: accidentTime.toISOString(),
+                date,
+                accidentTime,
                 damageCoords: JSON.stringify(bodyImage),
                 ...tableBodyDamage,
                 ...injury,
@@ -45,15 +47,21 @@ export const createForm100 = async (req: Request, res: Response) => {
                 evacuationType: evacuation.type,
                 evacuationPriority: evacuation.priority,
                 evacuationClinics: JSON.stringify(tableEvacuationClinics)
-            });
+            })
 
-        const { id: newForm100Id } = await db(forms100Tbl)
+        const formsIds = await db(forms100Tbl)
             .select('id')
             .where({ personId })
-            .limit(1)[0] as { id: number; };
+            .limit(1);
 
-        const updatedPerson = {
-            ...person,
+        if (!formsIds?.length) {
+            return res.end();
+        }
+
+        const newForm100Id = formsIds[0].id
+
+        const { id, ...updatedPerson } = {
+            ...convertIPersonToTablePerson(person as IPerson),
             lastForm100Id: newForm100Id,
             updatedAt: accidentTime,
         };
@@ -75,6 +83,21 @@ export const createForm100 = async (req: Request, res: Response) => {
                 return console.error(message);
             }
         }
+
+        const newPersonIds = await db(personsTbl)
+            .select('id')
+            .where({ lastForm100Id: newForm100Id })
+            .limit(1);
+
+        const newPersonId = newPersonIds?.[0]?.id;
+
+        if (!newPersonId) {
+            return res.end();
+        }
+
+        await db(forms100Tbl)
+            .update({ personId: newPersonId })
+            .where({ id: newForm100Id });
 
     } catch (message) {
         return console.error(message);

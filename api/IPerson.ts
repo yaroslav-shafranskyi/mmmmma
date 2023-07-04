@@ -4,7 +4,7 @@ import { ILastRecords, IRecords } from './IRecord';
 import { Rank } from './Rank';
 
 export interface IPerson {
-    id: number | 'create';
+    id: number;
     fullName: string;
     personalId: string;
     tokenNumber: string;

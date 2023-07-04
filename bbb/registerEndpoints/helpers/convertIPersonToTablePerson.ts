@@ -1,7 +1,7 @@
 import { IPerson } from "../../../api";
 
 type PersonType = Omit<IPerson, 'id'> & {
-    id?: number | 'create',
+    id?: number,
 };
 
 export const convertIPersonToTablePerson = (person: PersonType) => {
@@ -20,8 +20,8 @@ export const convertIPersonToTablePerson = (person: PersonType) => {
     } = lastRecords;
 
     return {
-        ...person,
-        ...address,
+        ...restPerson,
+        ...address ?? {},
         lastForm100Id,
         lastDischargeId,
         lastConclusionId,

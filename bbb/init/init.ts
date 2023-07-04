@@ -10,11 +10,11 @@ const handleCreateError = (tableName: string) => (e: unknown) => console.log(`Er
 const handleCreateSuccess = (tableName: string) => () => console.log(`Created table "${tableName}"`);
 
 Promise.all([
-    db.schema.hasTable(personsTbl)
+    db.schema.dropTableIfExists(personsTbl)
         .then(res => {
-            if (res) {
-                return;
-            }
+            // if (res) {
+            //     return;
+            // }
             db.schema.createTable(personsTbl, table => {
                 table.increments('id').primary();
                 table.string('fullName').notNullable().defaultTo('');
@@ -33,31 +33,31 @@ Promise.all([
                 table.string('appartments');
                 table.string('profession');
                 table.datetime('updatedAt');
-                table.integer('lastForm100Id');
-                table.integer('lastConclusionId');
-                table.integer('lastDischargeId');
-                table.integer('lastReferralId');
+                table.smallint('lastForm100Id');
+                table.smallint('lastConclusionId');
+                table.smallint('lastDischargeId');
+                table.smallint('lastReferralId');
             })
             .then(handleCreateSuccess('persons'))
             .catch(handleCreateError('persons'))
         })
         .catch(handleCheckError('persons')),
 
-    db.schema.hasTable(forms100Tbl)
+    db.schema.dropTableIfExists(forms100Tbl)
         .then(res => {
-            if (res) {
-                return;
-            }
+            // if (res) {
+            //     return;
+            // }
             db.schema.createTable(forms100Tbl, table => {
                 table.increments('id').primary();
                 table.string('clinic').notNullable().defaultTo('');
                 table.string('author').notNullable().defaultTo('');
-                table.integer('personId').notNullable();
+                table.smallint('personId').notNullable();
                 table.datetime('date').notNullable().defaultTo(new Date().toISOString());
                 table.datetime('accidentTime').notNullable();
                 table.enum('reason', Object.values(RecordType)).notNullable().defaultTo('');
                 Object.keys(BodyDamageInfo).forEach(key => {
-                    table.boolean(BodyDamageInfo[key]);
+                    table.boolean(key);
                 })
                 table.boolean('firearm');
                 table.boolean('nuclear');
@@ -98,7 +98,7 @@ Promise.all([
                 table.string('result').notNullable().defaultTo('');
                 table.boolean('selfLeave');
                 table.string('carriedBy');
-                table.timestamp('timeAfterAccident');
+                table.integer('timeAfterAccident');
                 table.string('firstAidInfo').notNullable().defaultTo('');
             })
             .then(handleCreateSuccess('forms100'))
@@ -106,32 +106,32 @@ Promise.all([
         })
         .catch(handleCheckError('forms100')),
 
-    db.schema.hasTable(briefsTbl)
+    db.schema.dropTableIfExists(briefsTbl)
         .then(res => {
-            if (res) {
-                return;
-            }
+            // if (res) {
+            //     return;
+            // }
             db.schema.createTable(briefsTbl, table => {
                 table.increments('id').primary();
                 table.datetime('date').notNullable();
                 table.string('fullDiagnosis').notNullable().defaultTo('');
                 table.enum('type', Object.values(Forms));
-                table.integer('personId').notNullable();
-                table.integer('formId').notNullable();
+                table.smallint('personId').notNullable();
+                table.smallint('formId').notNullable();
             })
             .then(handleCreateSuccess('briefs'))
             .catch(handleCreateError('briefs'))
         })
         .catch(handleCheckError('briefs')),
 
-    db.schema.hasTable(dischargesTbl)
+    db.schema.dropTableIfExists(dischargesTbl)
         .then(res => {
-            if (res) {
-                return;
-            }
+            // if (res) {
+            //     return;
+            // }
             db.schema.createTable(dischargesTbl, table => {
                 table.increments('id').primary();
-                table.integer('personId').notNullable();
+                table.smallint('personId').notNullable();
                 table.string('receiver').notNullable().defaultTo('');
                 table.enum('reason', Object.values(DischargeReason)).notNullable();
                 table.datetime('sickDate').notNullable();
@@ -149,14 +149,14 @@ Promise.all([
         })
         .catch(handleCheckError('discharges')),   
 
-    db.schema.hasTable(referralsTbl)
+    db.schema.dropTableIfExists(referralsTbl)
         .then(res => {
-            if (res) {
-                return;
-            }
+            // if (res) {
+            //     return;
+            // }
             db.schema.createTable(referralsTbl, table => {
                 table.increments('id').primary();
-                table.integer('personId').notNullable();
+                table.smallint('personId').notNullable();
                 table.string('militaryBase').notNullable().defaultTo('');
                 table.string('code').notNullable().defaultTo('');
                 table.datetime('date').notNullable().defaultTo(new Date().toISOString());
@@ -173,14 +173,14 @@ Promise.all([
         })
         .catch(handleCheckError('referrals')),
     
-    db.schema.hasTable(conclusionsTbl)
+    db.schema.dropTableIfExists(conclusionsTbl)
         .then(res => {
-            if (res) {
-                return;
-            }
+            // if (res) {
+            //     return;
+            // }
             db.schema.createTable(conclusionsTbl, table => {
                 table.increments('id').primary();
-                table.integer('personId').notNullable();
+                table.smallint('personId').notNullable();
                 table.string('sender').notNullable().defaultTo('');
                 table.string('doctor').notNullable().defaultTo('');
                 table.string('labResults');

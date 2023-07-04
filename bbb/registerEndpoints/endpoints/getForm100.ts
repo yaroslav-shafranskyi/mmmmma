@@ -1,34 +1,53 @@
 import { Request, Response } from "express";
 
-import { db } from '../../init';
+import { db } from "../../init";
 import { forms100Tbl, personsTbl } from "../../../constants";
 
 export const getForm100 = async (req: Request, res: Response) => {
-    const { id, personId } = req.body;
+  const { id: stringId, personId: stringPersonId } = req.body;
 
-    const isCreateMode = id === undefined || id === 'create';
-    const doesPersonExist = personId !== undefined && personId !== 'create';
+  const isCreateMode = stringId === undefined || stringId === "create";
+  const doesPersonExist =
+    stringPersonId !== undefined && stringPersonId !== "create";
 
-    try {
-        if (!doesPersonExist) {
-            return res.json(undefined)
-        }
+  const id = +stringId;
+  const personId = +stringPersonId;
 
-        if (isCreateMode) {
-            const data = await db(personsTbl)
-                .select(['fullName', 'personalId', 'tokenNumber', 'rank', 'gender', 'militaryBase'])
-                .where({ id: personId});
-            return res.json({ person: data?.[0] });
-        }
-
-        const data = await db(forms100Tbl)
-            .select('*')
-            .where({ id })
-            .andWhere({ personId });
-        
-        return res.json({ data })
-
-    } catch(error) {
-        return console.error(error);
+  try {
+    if (!doesPersonExist) {
+      return res.json(undefined);
     }
+
+    if (isCreateMode) {
+      const data = await db(personsTbl)
+        .select([
+          "fullName",
+          "personalId",
+          "tokenNumber",
+          "rank",
+          "gender",
+          "militaryBase",
+        ])
+        .where({ id: personId });
+      return res.json(data?.[0]);
+    }
+
+    const data = await db(forms100Tbl)
+      .select("*")
+      .where({ '_forms100.id': id })
+      .andWhere({ '_forms100.personId': personId })
+      .join(personsTbl, `${personsTbl}.id`, "=", `${forms100Tbl}.personId`)
+      .select(
+        `${personsTbl}.fullName`,
+        `${personsTbl}.personalId`,
+        `${personsTbl}.tokenNumber`,
+        `${personsTbl}.rank`,
+        `${personsTbl}.gender`,
+        `${personsTbl}.militaryBase`
+      );
+
+    return res.json(data[0]);
+  } catch (error) {
+    return console.error(error);
+  }
 };
