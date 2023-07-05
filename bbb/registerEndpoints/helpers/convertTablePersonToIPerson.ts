@@ -14,7 +14,6 @@ export const convertTablePersonToIPerson = (
     street,
     building,
     appartments,
-    updatedAt,
     lastConclusionId,
     lastDischargeId,
     lastForm100Id,

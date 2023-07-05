@@ -37,6 +37,7 @@ Promise.all([
                 table.smallint('lastConclusionId');
                 table.smallint('lastDischargeId');
                 table.smallint('lastReferralId');
+                table.smallint('recordsQuantity').notNullable().defaultTo(0);
             })
             .then(handleCreateSuccess('persons'))
             .catch(handleCreateError('persons'))

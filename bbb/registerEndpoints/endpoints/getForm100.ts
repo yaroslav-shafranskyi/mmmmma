@@ -65,8 +65,6 @@ export const getForm100 = async (req: Request, res: Response) => {
   const personId = +stringPersonId;
 
   try {
-    const allForms100 = await db(forms100Tbl);
-    console.log({ allForms100 })
     if (!doesPersonExist) {
       return res.json(undefined);
     }

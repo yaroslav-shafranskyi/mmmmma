@@ -29,10 +29,13 @@ const updatePersonAfterFormCreating = async (form100: IForm100) => {
 
   const isNewPerson = personId === -1;
 
+  const personRecords = await db(briefsTbl).where({ personId });
+
   const { id, ...updatedPerson } = {
     ...convertIPersonToTablePerson(person as IPerson),
     lastForm100Id: newForm100Id,
     updatedAt: accidentTime,
+    recordsQuantity: personRecords.length + 1,
   };
 
   if (isNewPerson) {

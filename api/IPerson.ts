@@ -32,3 +32,9 @@ export interface ITablePerson extends Omit<IPerson, "address" | "lastRecords"> {
   lastReferralId?: number | null;
   updatedAt?: string | null;
 }
+
+export interface IPersonBrief extends Omit<IPerson, 'records' | 'lastRecords'> {
+  updatedAt?: Date;
+  lastRecordDiagnosis?: string;
+  recordsQuantity?: number;
+}
