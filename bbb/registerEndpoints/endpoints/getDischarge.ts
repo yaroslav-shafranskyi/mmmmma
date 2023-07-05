@@ -5,6 +5,7 @@ import { dischargeUrl, dischargesTbl, personsTbl } from "../../../constants";
 import {
   convertITableDischargeToIDischarge,
   convertTableForm100ToIForm100,
+  convertTablePersonToIPerson,
 } from "../helpers";
 
 const getPersonData = async (personId: number) => {
@@ -44,15 +45,15 @@ const getFilledDischarge = async (
     .where({ id })
     .andWhere({ personId });
 
-  const persondata = await getPersonData(personId);
+  const personData = await getPersonData(personId);
 
-  const convertedData = convertITableDischargeToIDischarge({
-    ...dischargeData[0],
+  const convertedData = {
+    ...convertITableDischargeToIDischarge(dischargeData[0]),
     person: {
-      ...persondata,
+      ...convertTablePersonToIPerson(personData),
       id: personId,
     },
-  });
+  };
 
   return res.json(convertedData);
 };
