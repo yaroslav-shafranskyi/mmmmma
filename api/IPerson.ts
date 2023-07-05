@@ -8,7 +8,7 @@ export interface IPerson {
   fullName: string;
   personalId?: string;
   tokenNumber: string;
-  birthDate?: Date;
+  birthDate?: number;
   rank: Rank;
   gender: Gender;
   militaryBase: string; // TODO declare type
@@ -17,6 +17,9 @@ export interface IPerson {
   phoneNumber?: string;
   address?: IAddress;
   profession?: string;
+  updatedAt?: number;
+  lastRecordDiagnosis?: string;
+  recordsQuantity?: number;
 }
 
 export interface ITablePerson extends Omit<IPerson, "address" | "lastRecords"> {
@@ -30,11 +33,7 @@ export interface ITablePerson extends Omit<IPerson, "address" | "lastRecords"> {
   lastDischargeId?: number | null;
   lastForm100Id?: number | null;
   lastReferralId?: number | null;
-  updatedAt?: string | null;
+  updatedAt?: number | null;
 }
 
-export interface IPersonBrief extends Omit<IPerson, 'records' | 'lastRecords'> {
-  updatedAt?: Date;
-  lastRecordDiagnosis?: string;
-  recordsQuantity?: number;
-}
+export type PersonBrief = Omit<IPerson, "records" | "lastRecords">;

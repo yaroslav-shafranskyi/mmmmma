@@ -16,7 +16,7 @@ const insertNewForm100ToTable = async (data: Omit<IForm100, "id">) => {
 };
 
 const updatePersonAfterFormCreating = async (form100: IForm100) => {
-  const { person, accidentTime, id: newForm100Id } = form100;
+  const { person, accidentTime, fullDiagnosis, diagnosis, id: newForm100Id } = form100;
 
   const personId = person.id;
 
@@ -24,29 +24,22 @@ const updatePersonAfterFormCreating = async (form100: IForm100) => {
 
   const personRecords = await db(briefsTbl)
     .where({ personId })
-    .whereNot({ type: Forms.DISCHARGE || Forms.CONCLUSION });
+    .whereNot({ type: Forms.CONCLUSION });
 
   const { id, ...updatedPerson } = {
     ...convertIPersonToTablePerson(person as IPerson),
     lastForm100Id: newForm100Id,
     updatedAt: accidentTime,
     recordsQuantity: personRecords.length + 1,
+    lastRecordDiagnosis: fullDiagnosis ?? diagnosis,
   };
 
   if (isNewPerson) {
-    try {
-      await db(personsTbl).insert(updatedPerson);
-    } catch (message) {
-      return console.error(message);
-    }
+    await db(personsTbl).insert(updatedPerson);
   }
 
   if (!isNewPerson) {
-    try {
-      await db(personsTbl).update(updatedPerson).where({ id: personId });
-    } catch (message) {
-      return console.error(message);
-    }
+    await db(personsTbl).update(updatedPerson).where({ id: personId });
   }
 };
 
@@ -55,19 +48,31 @@ const updateForm100PersonId = async (formId: number, personId: number) => {
 };
 
 const updateBriefsTableAfterFormCreating = async (
-  data: Omit<IResponseBriefRecord, "id" | "type">
+  formData: Pick<
+    IForm100,
+    "id" | "accidentTime" | "diagnosis" | "fullDiagnosis"
+  >,
+  personId: number
 ) => {
+  const { id, accidentTime, fullDiagnosis, diagnosis } = formData;
+
   await db(briefsTbl).insert({
     type: Forms.FORM_100,
-    ...data,
+    date: accidentTime,
+    fullDiagnosis: fullDiagnosis ?? diagnosis,
+    formId: id,
+    personId,
   });
 };
 
 const updateFormsWithPersonId = async (
-  data: Pick<IForm100, "id" | "diagnosis" | "fullDiagnosis" | "date">,
+  formData: Pick<
+    IForm100,
+    "id" | "diagnosis" | "fullDiagnosis" | "accidentTime"
+  >,
   res: Response
 ) => {
-  const { id: newForm100Id, date, diagnosis, fullDiagnosis } = data;
+  const { id: newForm100Id, accidentTime, diagnosis, fullDiagnosis } = formData;
 
   const newPersonIds = await db(personsTbl)
     .select("id")
@@ -82,17 +87,25 @@ const updateFormsWithPersonId = async (
 
   await updateForm100PersonId(newForm100Id, newPersonId);
 
-  await updateBriefsTableAfterFormCreating({
-    formId: newForm100Id,
-    personId: newPersonId,
-    date,
-    fullDiagnosis: fullDiagnosis ?? diagnosis ?? "",
-  });
+  await updateBriefsTableAfterFormCreating(
+    {
+      id: newForm100Id,
+      accidentTime,
+      diagnosis,
+      fullDiagnosis,
+    },
+    newPersonId
+  );
 };
 
 export const createForm100 = async (req: Request, res: Response) => {
-  const { person, date, diagnosis, fullDiagnosis }: Omit<IForm100, "id"> =
-    req.body;
+  const {
+    person,
+    date,
+    accidentTime,
+    diagnosis,
+    fullDiagnosis,
+  }: Omit<IForm100, "id"> = req.body;
 
   const personId = person.id;
   const isNewPerson = person.id === -1;
@@ -102,26 +115,31 @@ export const createForm100 = async (req: Request, res: Response) => {
   const formsIds = await db(forms100Tbl)
     .select("id")
     .where({ personId })
-    .orderBy("id", "desc");
-
-  if (!formsIds?.length) {
-    return res.end();
-  }
+    .orderBy("date", "desc")
+    .limit(1);
 
   const newForm100Id = formsIds[0].id;
 
+  if (!newForm100Id) {
+    return res.end();
+  }
+
   await updatePersonAfterFormCreating({ ...req.body, id: newForm100Id });
 
+  const briefData = {
+    id: newForm100Id,
+    diagnosis,
+    fullDiagnosis,
+    accidentTime,
+  };
+
+  if (!isNewPerson) {
+    await updateBriefsTableAfterFormCreating(briefData, personId);
+    return res.end();
+  }
+
   if (isNewPerson) {
-    await updateFormsWithPersonId(
-      {
-        id: newForm100Id,
-        diagnosis: diagnosis,
-        fullDiagnosis: fullDiagnosis,
-        date,
-      },
-      res
-    );
+    await updateFormsWithPersonId(briefData, res);
   }
   return res.end();
 };

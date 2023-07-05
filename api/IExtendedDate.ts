@@ -10,5 +10,5 @@ export interface IDateData {
 }
 
 export interface IExtendedDate extends Partial<IDateData> {
-    date: Date;
+    date: number;
 }

@@ -12,7 +12,7 @@ export interface IConclusion extends ICommonFormHeaderFields {
     researchResults: string;
     diagnosis: string;
     recommendations: string;
-    date: Date;
+    date: number;
     signature: string;
     headOfTheClinic: string;
 }

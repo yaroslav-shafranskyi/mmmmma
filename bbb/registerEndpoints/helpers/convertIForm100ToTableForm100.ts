@@ -12,8 +12,6 @@ export const convertIForm100ToTableForm100 = (
 ): ITableForm100 => {
   const {
     person,
-    date,
-    accidentTime,
     bodyImage,
     bodyDamage,
     injury,
@@ -42,8 +40,6 @@ export const convertIForm100ToTableForm100 = (
   return {
     ...form100,
     personId,
-    date,
-    accidentTime,
     damageCoords: JSON.stringify(bodyImage) as unknown as DamageCoordsType,
     ...tableBodyDamage,
     ...injury,

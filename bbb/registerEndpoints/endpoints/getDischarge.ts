@@ -29,7 +29,7 @@ const getBlankDischarge = async (personId: number, res: Response) => {
   const data = await getPersonData(personId);
   return res.json({
     person: {
-      ...data,
+      ...convertTablePersonToIPerson(data),
       id: personId,
     },
   });

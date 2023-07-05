@@ -8,8 +8,12 @@ import {
   convertIPersonToTablePerson,
 } from "../helpers";
 
-const updateDischargesTableAfterFormCreating = async (data: IDischarge) => {
-  await db(dischargesTbl).insert(convertIDischargeToTableDischarge(data));
+const updateDischargesTableAfterFormCreating = async (
+  data: Omit<IDischarge, "id">
+) => {
+  await db(dischargesTbl).insert(
+    convertIDischargeToTableDischarge(data as IDischarge)
+  );
 };
 
 const updatePersonAfterFormCreating = async (
@@ -18,13 +22,16 @@ const updatePersonAfterFormCreating = async (
 ) => {
   const isNewPerson = person.id === -1;
 
-  const allPersonRecords = await db(briefsTbl).where({ personId: person.id });
+  const allPersonRecords = await db(briefsTbl)
+    .where({ personId: person.id })
+    .whereNot({ type: Forms.CONCLUSION });
 
   const { id, ...updatedPerson } = {
     ...convertIPersonToTablePerson(person),
     lastDischargeId: formData.id,
     updatedAt: formData.datesData.sick,
     recordsQuantity: (allPersonRecords ?? []).length + 1,
+    lastRecordDiagnosis: formData.fullDiagnosis,
   };
 
   if (isNewPerson) {
@@ -63,7 +70,8 @@ const updateFormsWithPersonId = async (
   const { id: formId, date, fullDiagnosis } = formData;
   const newPersonIds = await db(personsTbl)
     .select("id")
-    .where({ lastDischargeId: formId });
+    .where({ lastDischargeId: formId })
+    .limit(1);
   const newPersonId = newPersonIds[0]?.id;
 
   if (!newPersonId) {
@@ -78,7 +86,7 @@ const updateFormsWithPersonId = async (
 };
 
 export const createDischarge = async (req: Request, res: Response) => {
-  const data = req.body as IDischarge;
+  const { id, ...data } = req.body as IDischarge;
   const { person, fullDiagnosis, date } = data;
 
   const isNewPerson = person.id === -1;
@@ -88,7 +96,8 @@ export const createDischarge = async (req: Request, res: Response) => {
   const newDischargesTable = await db(dischargesTbl)
     .where({ personId: person.id })
     .select("id")
-    .orderBy("id", "desc");
+    .orderBy("id", "desc")
+    .limit(1);
 
   const newDischargeId = newDischargesTable[0]?.id;
 

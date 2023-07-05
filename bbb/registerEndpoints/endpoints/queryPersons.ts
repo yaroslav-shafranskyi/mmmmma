@@ -7,28 +7,25 @@ import { convertTablePersonToIPerson } from "../helpers";
 
 export const queryPersons = async (_req: Request, res: Response) => {
   try {
-    const data = await db(personsTbl)
-      .select([
-        "_persons.id",
-        "_persons.fullName",
-        "_persons.personalId",
-        "_persons.rank",
-        "_persons.gender",
-        "_persons.militaryBase",
-        "_persons.updatedAt",
-        "_persons.recordsQuantity",
-        "_persons.birthDate",
-      ])
-      .join(briefsTbl, "_briefs.personId", "=", "_persons.id")
-      .select(["_briefs.fullDiagnosis"])
-      .orderBy("_briefs.id", "desc")
-      .limit(1);
+    const data = await db(personsTbl).select([
+      "id",
+      "fullName",
+      "personalId",
+      "rank",
+      "gender",
+      "militaryBase",
+      "updatedAt",
+      "recordsQuantity",
+      "birthDate",
+      "lastForm100Id",
+      "lastConclusionId",
+      "lastDischargeId",
+      "lastReferralId",
+      "lastRecordDiagnosis",
+    ]);
 
     return res.json({
-      entities: data.map((person) => ({
-        ...convertTablePersonToIPerson(person),
-        lastRecordDiagnosis: person.fullDiagnosis,
-      })),
+      entities: data.map(convertTablePersonToIPerson),
       total: data.length,
     });
   } catch (message) {

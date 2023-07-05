@@ -6,7 +6,7 @@ export type PositionWithName = {
 export interface IReferral {
     militaryBase: string;
     code: string;
-    date: Date;
+    date: number;
     militaryBaseAddress: string;
     number: string;
     receiver: string;

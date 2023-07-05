@@ -3,7 +3,7 @@ export interface ICommonFormHeaderFields {
     clinic: string;
     code: string;
     order: {
-        date: Date;
+        date: number;
         number: string;
     };
 }

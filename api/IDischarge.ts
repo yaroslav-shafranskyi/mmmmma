@@ -16,16 +16,16 @@ export interface IDischarge extends ICommonFormHeaderFields {
     fullDiagnosis: string;
     info: string;
     recommendations: string;
-    date: Date;
+    date: number;
     doctor: string;
 }
 
 export interface ITableDischarge extends Omit<IDischarge, 'person' | 'datesData' | 'order' > {
-    sickDate: Date;
-    referralDate: Date;
-    arrivalDate: Date;
-    leavingDate: Date;
+    sickDate: number;
+    referralDate: number;
+    arrivalDate: number;
+    leavingDate: number;
     personId: number;
-    orderDate: Date;
+    orderDate: number;
     orderNumber: string;
 }

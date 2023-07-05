@@ -31,8 +31,8 @@ export interface IForm100 {
   clinic: string;
   author: string;
   person: Form100PersonData;
-  date: Date;
-  accidentTime: Date;
+  date: number;
+  accidentTime: number;
   reason: RecordType;
   bodyImage: IBodyImage;
   bodyDamage: BodyDamageInfo[];

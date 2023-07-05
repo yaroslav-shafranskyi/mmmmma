@@ -1,4 +1,4 @@
 export interface IPlait {
     status: boolean;
-    date: Date;
+    date: number;
 }

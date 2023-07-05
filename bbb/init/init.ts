@@ -19,7 +19,7 @@ Promise.all([
                 table.increments('id').primary();
                 table.string('fullName').notNullable().defaultTo('');
                 table.string('personalId').notNullable().defaultTo('');
-                table.date('birthDate');
+                table.bigint('birthDate');
                 table.string('tokenNumber');
                 table.enum('rank', [...Object.values(ArmyRank), null]);
                 table.enum('gender', [...Object.values(Gender), null]);
@@ -32,12 +32,13 @@ Promise.all([
                 table.string('building').notNullable().defaultTo('');
                 table.string('appartments');
                 table.string('profession');
-                table.datetime('updatedAt');
+                table.bigint('updatedAt');
                 table.smallint('lastForm100Id');
                 table.smallint('lastConclusionId');
                 table.smallint('lastDischargeId');
                 table.smallint('lastReferralId');
                 table.smallint('recordsQuantity').notNullable().defaultTo(0);
+                table.string('lastRecordDiagnosis');
             })
             .then(handleCreateSuccess('persons'))
             .catch(handleCreateError('persons'))
@@ -54,8 +55,8 @@ Promise.all([
                 table.string('clinic').notNullable().defaultTo('');
                 table.string('author').notNullable().defaultTo('');
                 table.smallint('personId').notNullable();
-                table.datetime('date').notNullable().defaultTo(new Date().toISOString());
-                table.datetime('accidentTime').notNullable();
+                table.bigint('date').notNullable().defaultTo(Date.now());
+                table.bigint('accidentTime').notNullable();
                 table.enum('reason', Object.values(RecordType)).notNullable().defaultTo('');
                 Object.keys(BodyDamageInfo).forEach(key => {
                     table.boolean(key);
@@ -82,7 +83,7 @@ Promise.all([
                 table.boolean('bandage');
                 table.boolean('sanitary');
                 table.boolean('additionalInfo');
-                table.datetime('plait');
+                table.bigint('plait');
                 table.enum('sanitaryTreatment', Object.values(SanitaryTreatmentStatus));
                 table.enum('evacuationTransport', Object.values(EvacuationTransport));
                 table.enum('evacuationType', Object.values(EvacuationType));
@@ -114,7 +115,7 @@ Promise.all([
             // }
             db.schema.createTable(briefsTbl, table => {
                 table.increments('id').primary();
-                table.datetime('date').notNullable();
+                table.bigint('date').notNullable();
                 table.string('fullDiagnosis').notNullable().defaultTo('');
                 table.enum('type', Object.values(Forms));
                 table.smallint('personId').notNullable();
@@ -137,17 +138,17 @@ Promise.all([
                 table.string('code').notNullable().defaultTo(''),
                 table.string('department').notNullable().defaultTo(''),
                 table.string('orderNumber').notNullable().defaultTo(''),
-                table.dateTime('orderDate').notNullable();
+                table.bigint('orderDate').notNullable();
                 table.string('receiver').notNullable().defaultTo('');
                 table.enum('reason', Object.values(DischargeReason)).notNullable();
-                table.datetime('sickDate').notNullable();
-                table.datetime('referralDate').notNullable();
-                table.datetime('arrivalDate').notNullable();
-                table.datetime('leavingDate').notNullable();
+                table.bigint('sickDate').notNullable();
+                table.bigint('referralDate').notNullable();
+                table.bigint('arrivalDate').notNullable();
+                table.bigint('leavingDate').notNullable();
                 table.string('fullDiagnosis').notNullable().defaultTo('');
                 table.string('info').notNullable().defaultTo('');
                 table.string('recommendations').notNullable().defaultTo('');
-                table.datetime('date').notNullable().defaultTo(new Date().toISOString());
+                table.bigint('date').notNullable().defaultTo(Date.now());
                 table.string('doctor').notNullable().defaultTo('');
             })
             .then(handleCreateSuccess('discharges'))
@@ -165,7 +166,7 @@ Promise.all([
                 table.smallint('personId').notNullable();
                 table.string('militaryBase').notNullable().defaultTo('');
                 table.string('code').notNullable().defaultTo('');
-                table.datetime('date').notNullable().defaultTo(new Date().toISOString());
+                table.bigint('date').notNullable().defaultTo(Date.now());
                 table.string('militaryBaseAddress').notNullable().defaultTo('');
                 table.string('number').notNullable().defaultTo('');
                 table.string('receiver').notNullable().defaultTo('');
@@ -191,14 +192,14 @@ Promise.all([
                 table.string('code').notNullable().defaultTo(''),
                 table.string('department').notNullable().defaultTo(''),
                 table.string('orderNumber').notNullable().defaultTo(''),
-                table.dateTime('orderDate').notNullable();
+                table.bigint('orderDate').notNullable();
                 table.string('sender').notNullable().defaultTo('');
                 table.string('doctor').notNullable().defaultTo('');
                 table.string('labResults');
                 table.string('researchResults');
                 table.string('diagnosis').notNullable().defaultTo('');
                 table.string('recommendations');
-                table.datetime('date').notNullable().defaultTo(new Date().toISOString());
+                table.bigint('date').notNullable().defaultTo(Date.now());
                 table.string('headOfTheClinic').notNullable().defaultTo('');
             })
             .then(handleCreateSuccess('conclusions'))
