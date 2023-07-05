@@ -21,8 +21,8 @@ Promise.all([
                 table.string('personalId').notNullable().defaultTo('');
                 table.date('birthDate');
                 table.string('tokenNumber');
-                table.enum('rank', Object.values(ArmyRank));
-                table.enum('gender', Object.values(Gender));
+                table.enum('rank', [...Object.values(ArmyRank), null]);
+                table.enum('gender', [...Object.values(Gender), null]);
                 table.string('militaryBase').notNullable().defaultTo('');
                 table.string('phoneNumber');
                 table.string('oblast').notNullable().defaultTo('');
@@ -133,6 +133,11 @@ Promise.all([
             db.schema.createTable(dischargesTbl, table => {
                 table.increments('id').primary();
                 table.smallint('personId').notNullable();
+                table.string('clinic').notNullable().defaultTo('');
+                table.string('code').notNullable().defaultTo(''),
+                table.string('department').notNullable().defaultTo(''),
+                table.string('orderNumber').notNullable().defaultTo(''),
+                table.dateTime('orderDate').notNullable();
                 table.string('receiver').notNullable().defaultTo('');
                 table.enum('reason', Object.values(DischargeReason)).notNullable();
                 table.datetime('sickDate').notNullable();
@@ -182,6 +187,11 @@ Promise.all([
             db.schema.createTable(conclusionsTbl, table => {
                 table.increments('id').primary();
                 table.smallint('personId').notNullable();
+                table.string('clinic').notNullable().defaultTo('');
+                table.string('code').notNullable().defaultTo(''),
+                table.string('department').notNullable().defaultTo(''),
+                table.string('orderNumber').notNullable().defaultTo(''),
+                table.dateTime('orderDate').notNullable();
                 table.string('sender').notNullable().defaultTo('');
                 table.string('doctor').notNullable().defaultTo('');
                 table.string('labResults');

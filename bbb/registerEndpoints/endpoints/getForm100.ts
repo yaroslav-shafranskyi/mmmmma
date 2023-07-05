@@ -2,10 +2,7 @@ import { Request, Response } from "express";
 
 import { db } from "../../init";
 import { forms100Tbl, personsTbl } from "../../../constants";
-import {
-  convertTableForm100ToIForm100,
-  convertTablePersonToIPerson,
-} from "../helpers";
+import { convertTableForm100ToIForm100 } from "../helpers";
 
 const getPersonData = async (personId: number) => {
   const data = await db(personsTbl)

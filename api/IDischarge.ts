@@ -8,7 +8,7 @@ export enum DischargeReason {
 }
 
 export interface IDischarge extends ICommonFormHeaderFields {
-    id: string;
+    id: number;
     receiver: string;
     person: IPerson;
     datesData: IDischargeDates;
@@ -18,4 +18,14 @@ export interface IDischarge extends ICommonFormHeaderFields {
     recommendations: string;
     date: Date;
     doctor: string;
+}
+
+export interface ITableDischarge extends Omit<IDischarge, 'person' | 'datesData' | 'order' > {
+    sickDate: Date;
+    referralDate: Date;
+    arrivalDate: Date;
+    leavingDate: Date;
+    personId: number;
+    orderDate: Date;
+    orderNumber: string;
 }

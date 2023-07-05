@@ -5,6 +5,7 @@ import {
   updateUrl,
   getUrl,
   form100Url,
+  dischargeUrl,
 } from "../../constants";
 
 import { app } from "../index";
@@ -16,7 +17,9 @@ import {
   getPerson,
   queryPersons,
   updatePerson,
-  updateForm100
+  updateForm100,
+  createDischarge,
+  getDischarge,
 } from "./endpoints";
 
 export const registerEndpoints = () => {
@@ -28,4 +31,7 @@ export const registerEndpoints = () => {
   app.post(`${serviceUrl}${form100Url}${getUrl}`, getForm100);
   app.post(`${serviceUrl}${form100Url}${createUrl}`, createForm100);
   app.post(`${serviceUrl}${form100Url}${updateUrl}`, updateForm100);
+
+  app.post(`${serviceUrl}${dischargeUrl}${createUrl}`, createDischarge);
+  app.post(`${serviceUrl}${dischargeUrl}${getUrl}`, getDischarge);
 };

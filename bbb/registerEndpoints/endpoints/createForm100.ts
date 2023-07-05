@@ -1,13 +1,6 @@
 import { Request, Response } from "express";
 
-import {
-  BodyDamageInfo,
-  EvacuationClinic,
-  Forms,
-  IForm100,
-  IPerson,
-  IResponseBriefRecord,
-} from "../../../api";
+import { Forms, IForm100, IPerson, IResponseBriefRecord } from "../../../api";
 import { db } from "../../init";
 import { personsTbl, forms100Tbl, briefsTbl } from "../../../constants";
 
@@ -29,7 +22,9 @@ const updatePersonAfterFormCreating = async (form100: IForm100) => {
 
   const isNewPerson = personId === -1;
 
-  const personRecords = await db(briefsTbl).where({ personId });
+  const personRecords = await db(briefsTbl)
+    .where({ personId })
+    .whereNot({ type: Forms.DISCHARGE || Forms.CONCLUSION });
 
   const { id, ...updatedPerson } = {
     ...convertIPersonToTablePerson(person as IPerson),
@@ -100,6 +95,7 @@ export const createForm100 = async (req: Request, res: Response) => {
     req.body;
 
   const personId = person.id;
+  const isNewPerson = person.id === -1;
 
   await insertNewForm100ToTable(req.body);
 
@@ -116,15 +112,16 @@ export const createForm100 = async (req: Request, res: Response) => {
 
   await updatePersonAfterFormCreating({ ...req.body, id: newForm100Id });
 
-  await updateFormsWithPersonId(
-    {
-      id: newForm100Id,
-      diagnosis: diagnosis,
-      fullDiagnosis: fullDiagnosis,
-      date,
-    },
-    res
-  );
-
+  if (isNewPerson) {
+    await updateFormsWithPersonId(
+      {
+        id: newForm100Id,
+        diagnosis: diagnosis,
+        fullDiagnosis: fullDiagnosis,
+        date,
+      },
+      res
+    );
+  }
   return res.end();
 };

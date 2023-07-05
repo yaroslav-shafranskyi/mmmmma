@@ -36,11 +36,3 @@ export interface ILastRecords {
     referral?: number;
     conclusion?: number;
 }
-
-export interface IRecords {
-    form100: IForm100Record[];
-    brief: IBriefRecord[];
-    discharge: IDischargeRecord[];
-    referral: IReferralRecord[];
-    conclusion: IConclusionRecord[];
-}
