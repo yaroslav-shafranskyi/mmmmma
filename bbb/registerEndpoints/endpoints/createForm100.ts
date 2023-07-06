@@ -7,6 +7,7 @@ import { personsTbl, forms100Tbl, briefsTbl } from "../../../constants";
 import {
   convertIForm100ToTableForm100,
   convertIPersonToTablePerson,
+  getPersonRecordsQuantity,
 } from "../helpers";
 
 const insertNewForm100ToTable = async (data: Omit<IForm100, "id">) => {
@@ -16,30 +17,35 @@ const insertNewForm100ToTable = async (data: Omit<IForm100, "id">) => {
 };
 
 const updatePersonAfterFormCreating = async (form100: IForm100) => {
-  const { person, accidentTime, fullDiagnosis, diagnosis, id: newForm100Id } = form100;
+  const {
+    person,
+    accidentTime,
+    fullDiagnosis,
+    diagnosis,
+    id: newForm100Id,
+  } = form100;
 
   const personId = person.id;
 
   const isNewPerson = personId === -1;
 
-  const personRecords = await db(briefsTbl)
-    .where({ personId })
-    .whereNot({ type: Forms.CONCLUSION });
-
   const { id, ...updatedPerson } = {
     ...convertIPersonToTablePerson(person as IPerson),
     lastForm100Id: newForm100Id,
     updatedAt: accidentTime,
-    recordsQuantity: personRecords.length + 1,
     lastRecordDiagnosis: fullDiagnosis ?? diagnosis,
   };
 
   if (isNewPerson) {
-    await db(personsTbl).insert(updatedPerson);
+    await db(personsTbl).insert({ ...updatedPerson, recordsQuantity: 1 });
   }
 
   if (!isNewPerson) {
-    await db(personsTbl).update(updatedPerson).where({ id: personId });
+    const prevRecordsQuantity = await getPersonRecordsQuantity(personId);
+
+    await db(personsTbl)
+      .update({ ...updatedPerson, recordsQuantity: prevRecordsQuantity + 1 })
+      .where({ id: personId });
   }
 };
 
@@ -118,7 +124,7 @@ export const createForm100 = async (req: Request, res: Response) => {
     .orderBy("date", "desc")
     .limit(1);
 
-  const newForm100Id = formsIds[0].id;
+  const newForm100Id = formsIds[0]?.id;
 
   if (!newForm100Id) {
     return res.end();

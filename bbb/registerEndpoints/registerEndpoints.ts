@@ -6,6 +6,7 @@ import {
   getUrl,
   form100Url,
   dischargeUrl,
+  referralUrl,
 } from "../../constants";
 
 import { app } from "../index";
@@ -20,6 +21,8 @@ import {
   updateForm100,
   createDischarge,
   getDischarge,
+  createReferral,
+  getReferral,
 } from "./endpoints";
 
 export const registerEndpoints = () => {
@@ -34,4 +37,7 @@ export const registerEndpoints = () => {
 
   app.post(`${serviceUrl}${dischargeUrl}${createUrl}`, createDischarge);
   app.post(`${serviceUrl}${dischargeUrl}${getUrl}`, getDischarge);
+
+  app.post(`${serviceUrl}${referralUrl}${createUrl}`, createReferral);
+  app.post(`${serviceUrl}${referralUrl}${getUrl}`, getReferral);
 };

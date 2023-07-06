@@ -1,19 +1,27 @@
 export type PositionWithName = {
-    position: string;
-    fullName: string;
-}
+  position: string;
+  fullName: string;
+};
 
 export interface IReferral {
-    militaryBase: string;
-    code: string;
-    date: number;
-    militaryBaseAddress: string;
-    number: string;
-    receiver: string;
-    patient: string;
-    diagnosis: string;
-    commander: PositionWithName;
-    medicalCommander: PositionWithName;
-    id: string;
-    personId: string;
+  militaryBase: string;
+  code: string;
+  date: number;
+  militaryBaseAddress: string;
+  number: string;
+  receiver: string;
+  patient: string;
+  diagnosis: string;
+  commander: PositionWithName;
+  medicalCommander: PositionWithName;
+  id: number;
+  personId: number;
+}
+
+export interface ITableReferral
+  extends Omit<IReferral, "commander" | "medicalCommander"> {
+  commanderName: string;
+  commanderPosition: string;
+  medicalCommanderName: string;
+  medicalCommanderPosition: string;
 }

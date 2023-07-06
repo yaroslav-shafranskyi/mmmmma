@@ -16,6 +16,8 @@ export const getPerson = async (req: Request, res: Response) => {
       return res.json("Person not found!");
     }
 
+    const allRecords = await db(briefsTbl);
+
     const records = await db(briefsTbl)
       .select(["id", "date", "fullDiagnosis", "type", "formId"])
       .where({ personId: id });

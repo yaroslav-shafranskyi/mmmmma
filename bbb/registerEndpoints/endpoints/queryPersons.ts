@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import { db } from "../../init";
-import { briefsTbl, personsTbl } from "../../../constants";
+import { personsTbl } from "../../../constants";
 
 import { convertTablePersonToIPerson } from "../helpers";
 

@@ -6,6 +6,7 @@ import { db } from "../../init";
 import {
   convertIDischargeToTableDischarge,
   convertIPersonToTablePerson,
+  getPersonRecordsQuantity,
 } from "../helpers";
 
 const updateDischargesTableAfterFormCreating = async (
@@ -22,24 +23,26 @@ const updatePersonAfterFormCreating = async (
 ) => {
   const isNewPerson = person.id === -1;
 
-  const allPersonRecords = await db(briefsTbl)
-    .where({ personId: person.id })
-    .whereNot({ type: Forms.CONCLUSION });
-
   const { id, ...updatedPerson } = {
     ...convertIPersonToTablePerson(person),
     lastDischargeId: formData.id,
     updatedAt: formData.datesData.sick,
-    recordsQuantity: (allPersonRecords ?? []).length + 1,
     lastRecordDiagnosis: formData.fullDiagnosis,
   };
 
   if (isNewPerson) {
-    await db(personsTbl).insert(updatedPerson);
+    await db(personsTbl).insert({ ...updatedPerson, recordsQuantity: 1 });
   }
 
   if (!isNewPerson) {
-    await db(personsTbl).update(updatedPerson).where({ id: person.id });
+    const prevRecordsQuantity = await getPersonRecordsQuantity(person.id);
+
+    await db(personsTbl)
+      .update({
+        ...updatedPerson,
+        recordsQuantity: prevRecordsQuantity + 1,
+      })
+      .where({ id: person.id });
   }
 };
 
