@@ -12,3 +12,6 @@ export * from "./getDischarge";
 
 export * from "./createReferral";
 export * from "./getReferral";
+
+export * from './getConclusion';
+export * from './createConclusion';

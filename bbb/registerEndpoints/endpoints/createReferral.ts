@@ -106,15 +106,13 @@ export const createReferral = async (req: Request, res: Response) => {
       return res.end();
     }
 
+    const briefData = { id: newFormId, date, diagnosis };
+
     await updatePersonAfterFormCreating({
       personId,
-      date,
       patient,
-      diagnosis,
-      id: newFormId,
+      ...briefData,
     });
-
-    const briefData = { id: newFormId, date, diagnosis };
 
     if (!isNewPerson) {
       await updateBriefsTableAfterFormCreating(briefData, personId);

@@ -1,45 +1,33 @@
 import { Request, Response } from "express";
 
 import { db } from "../../init";
-import { dischargesTbl, personsTbl } from "../../../constants";
-import {
-  convertITableDischargeToIDischarge,
-  convertTablePersonToIPerson,
-} from "../helpers";
+import { conclusionsTbl, personsTbl } from "../../../constants";
+import { convertITableConclusionToIConclusion } from "../helpers";
 
-const getPersonData = async (personId: number) => {
+const getPersonData = async (id: number) => {
   const data = await db(personsTbl)
-    .select([
-      "fullName",
-      "birthDate",
-      "oblast",
-      "region",
-      "settlement",
-      "street",
-      "building",
-      "appartments",
-      "profession",
-    ])
-    .where({ id: personId });
+    .select(["id", "fullName", "birthDate"])
+    .where({ id });
+
   return data[0];
 };
 
-const getBlankDischarge = async (personId: number, res: Response) => {
+const getBlankConclusion = async (personId: number, res: Response) => {
   const data = await getPersonData(personId);
   return res.json({
     person: {
-      ...convertTablePersonToIPerson(data),
+      ...data,
       id: personId,
     },
   });
 };
 
-const getFilledDischarge = async (
+const getFilledConclusion = async (
   id: number,
   personId: number,
   res: Response
 ) => {
-  const dischargeData = await db(dischargesTbl)
+  const formData = await db(conclusionsTbl)
     .select("*")
     .where({ id })
     .andWhere({ personId });
@@ -47,9 +35,9 @@ const getFilledDischarge = async (
   const personData = await getPersonData(personId);
 
   const convertedData = {
-    ...convertITableDischargeToIDischarge(dischargeData[0]),
+    ...convertITableConclusionToIConclusion(formData[0]),
     person: {
-      ...convertTablePersonToIPerson(personData),
+      ...personData,
       id: personId,
     },
   };
@@ -57,7 +45,7 @@ const getFilledDischarge = async (
   return res.json(convertedData);
 };
 
-export const getDischarge = async (req: Request, res: Response) => {
+export const getConclusion = async (req: Request, res: Response) => {
   const { id: stringId, personId: stringPersonId } = req.body as {
     id: string;
     personId: string;
@@ -72,14 +60,16 @@ export const getDischarge = async (req: Request, res: Response) => {
 
   try {
     if (!doesPersonExist) {
-      return res.json(undefined);
+      return res.json();
     }
 
     if (isCreateMode) {
-      return await getBlankDischarge(personId, res);
+      return await getBlankConclusion(personId, res);
     }
 
-    await getFilledDischarge(id, personId, res);
+    if (!isCreateMode) {
+      return await getFilledConclusion(id, personId, res);
+    }
   } catch (error) {
     return console.error(error);
   }

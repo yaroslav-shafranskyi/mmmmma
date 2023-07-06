@@ -156,31 +156,31 @@ Promise.all([
     //     })
     //     .catch(handleCheckError('discharges')),   
 
-    db.schema.dropTableIfExists(referralsTbl)
-        .then(res => {
-            // if (res) {
-            //     return;
-            // }
-            db.schema.createTable(referralsTbl, table => {
-                table.increments('id').primary();
-                table.smallint('personId').notNullable();
-                table.string('militaryBase').notNullable().defaultTo('');
-                table.string('code').notNullable().defaultTo('');
-                table.bigint('date').notNullable().defaultTo(Date.now());
-                table.string('militaryBaseAddress').notNullable().defaultTo('');
-                table.string('number').notNullable().defaultTo('');
-                table.string('receiver').notNullable().defaultTo('');
-                table.string('patient').notNullable().defaultTo('');
-                table.string('diagnosis').notNullable().defaultTo('');
-                table.string('commanderName').notNullable().defaultTo('');
-                table.string('commanderPosition').notNullable()
-                table.string('medicalCommanderName').notNullable().defaultTo('');
-                table.string('medicalCommanderPosition').notNullable().defaultTo('');
-            })
-            .then(handleCreateSuccess('referrals'))
-            .catch(handleCreateError('referrals'))
-        })
-        .catch(handleCheckError('referrals')),
+    // db.schema.dropTableIfExists(referralsTbl)
+    //     .then(res => {
+    //         // if (res) {
+    //         //     return;
+    //         // }
+    //         db.schema.createTable(referralsTbl, table => {
+    //             table.increments('id').primary();
+    //             table.smallint('personId').notNullable();
+    //             table.string('militaryBase').notNullable().defaultTo('');
+    //             table.string('code').notNullable().defaultTo('');
+    //             table.bigint('date').notNullable().defaultTo(Date.now());
+    //             table.string('militaryBaseAddress').notNullable().defaultTo('');
+    //             table.string('number').notNullable().defaultTo('');
+    //             table.string('receiver').notNullable().defaultTo('');
+    //             table.string('patient').notNullable().defaultTo('');
+    //             table.string('diagnosis').notNullable().defaultTo('');
+    //             table.string('commanderName').notNullable().defaultTo('');
+    //             table.string('commanderPosition').notNullable()
+    //             table.string('medicalCommanderName').notNullable().defaultTo('');
+    //             table.string('medicalCommanderPosition').notNullable().defaultTo('');
+    //         })
+    //         .then(handleCreateSuccess('referrals'))
+    //         .catch(handleCreateError('referrals'))
+    //     })
+    //     .catch(handleCheckError('referrals')),
     
     db.schema.dropTableIfExists(conclusionsTbl)
         .then(res => {
@@ -203,6 +203,7 @@ Promise.all([
                 table.string('recommendations');
                 table.bigint('date').notNullable().defaultTo(Date.now());
                 table.string('headOfTheClinic').notNullable().defaultTo('');
+                table.string('signature')
             })
             .then(handleCreateSuccess('conclusions'))
             .catch(handleCreateError('conclusions'))

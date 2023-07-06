@@ -10,4 +10,7 @@ export * from "./convertITableDischargeToIDischarge";
 export * from "./convertIReferralToITableReferral";
 export * from "./convertITableReferralToIReferral";
 
+export * from "./convertIConclusionToITableConclusion";
+export * from "./convertITableConclusionToIConclusion";
+
 export * from "./getPersonRecordsQuantity";

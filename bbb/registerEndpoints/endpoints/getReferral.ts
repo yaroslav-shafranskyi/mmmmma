@@ -27,8 +27,6 @@ const getFilledReferral = async (
     .where({ id })
     .andWhere({ personId });
 
-    const all = await db(referralsTbl);
-
   return res.json(convertITableReferralToIReferral(formData[0]));
 };
 
