@@ -20,3 +20,4 @@ export * from './IReferral';
 export * from './IConclusion';
 export * from './ICommonFormHeaderFields';
 export * from './QueryPersonsData';
+export * from './IQuery';
