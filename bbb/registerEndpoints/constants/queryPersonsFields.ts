@@ -1,20 +1,20 @@
 import { Gender, TableFilterType } from "../../../api";
 
 export const queryPersonsFields = [
-  "id",
-  "fullName",
-  "personalId",
-  "rank",
-  "gender",
-  "militaryBase",
-  "updatedAt",
-  "recordsQuantity",
-  "birthDate",
-  "lastForm100Id",
-  "lastConclusionId",
-  "lastDischargeId",
-  "lastReferralId",
-  "lastRecordDiagnosis",
+  "_persons.id",
+  "_persons.fullName",
+  "_persons.personalId",
+  "_persons.rank",
+  "_persons.gender",
+  "_persons.militaryBase",
+  "_persons.updatedAt",
+  "_persons.recordsQuantity",
+  "_persons.birthDate",
+  "_persons.lastForm100Id",
+  "_persons.lastConclusionId",
+  "_persons.lastDischargeId",
+  "_persons.lastReferralId",
+  "_persons.lastRecordDiagnosis",
 ];
 
 export const queryPersonsFilterFields = {

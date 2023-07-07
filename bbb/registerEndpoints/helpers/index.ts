@@ -14,3 +14,7 @@ export * from "./convertIConclusionToITableConclusion";
 export * from "./convertITableConclusionToIConclusion";
 
 export * from "./getPersonRecordsQuantity";
+
+export * from "./queryHelpers";
+
+export * from './checkIfNullish';
