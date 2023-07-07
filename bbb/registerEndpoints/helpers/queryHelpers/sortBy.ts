@@ -2,7 +2,7 @@ import { Knex } from "knex";
 
 import { ISort } from "../../../../api";
 
-export const sortBy = <T extends object>(
+export const sortData = <T extends object>(
   value: ISort<T> | undefined,
   builder: Knex.QueryBuilder
 ) => {

@@ -9,5 +9,5 @@ export const filterByString = (
   if (checkIfNullish(value)) {
     return;
   }
-  builder.where(`_persons.${key}`, "ilike", `%${value}%`);
+  builder.where(key, "ilike", `%${value}%`);
 };
