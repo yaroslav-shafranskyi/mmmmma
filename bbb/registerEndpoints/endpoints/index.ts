@@ -13,5 +13,10 @@ export * from "./getDischarge";
 export * from "./createReferral";
 export * from "./getReferral";
 
-export * from './getConclusion';
-export * from './createConclusion';
+export * from "./getConclusion";
+export * from "./createConclusion";
+
+export * from "./login";
+export * from "./createUser";
+export * from "./updateUser";
+export * from './confirmPassword';

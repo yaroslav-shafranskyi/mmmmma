@@ -242,7 +242,12 @@ Promise.all([
   //         table.string("user").notNullable();
   //         table.string("password").notNullable();
   //         table.string("militaryBase");
+  //         table.string("fullName");
+  //         table.string("clinic");
+  //         table.string("signature");
+  //         table.string("position");
   //       })
+  //       .then(handleCreateSuccess('users'))
   //       .catch(handleCreateError)
   //   )
   //   .catch(handleCheckError),

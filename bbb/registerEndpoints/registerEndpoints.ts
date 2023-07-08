@@ -9,6 +9,7 @@ import {
   referralUrl,
   conclusionUrl,
   loginUrl,
+  userUrl,
 } from "../../constants";
 
 import { app } from "../index";
@@ -27,8 +28,11 @@ import {
   getReferral,
   getConclusion,
   createConclusion,
+  login,
+  createUser,
+  updateUser,
+  confirmPassword,
 } from "./endpoints";
-import { login } from "./endpoints/login";
 
 export const registerEndpoints = () => {
   app.post(`${serviceUrl}${personsUrl}`, queryPersons);
@@ -50,4 +54,7 @@ export const registerEndpoints = () => {
   app.post(`${serviceUrl}${conclusionUrl}${createUrl}`, createConclusion);
 
   app.post(`${serviceUrl}${loginUrl}`, login);
+  app.post(`${serviceUrl}${userUrl}${createUrl}`, createUser);
+  app.post(`${serviceUrl}${userUrl}${updateUrl}`, updateUser);
+  app.post(`${serviceUrl}${loginUrl}/confirm`, confirmPassword);
 };
