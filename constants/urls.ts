@@ -9,3 +9,5 @@ export const personsUrl = '/persons';
 export const dischargeUrl = '/discharge';
 export const referralUrl = '/referral';
 export const conclusionUrl = '/conclusion';
+
+export const loginUrl = '/login';

@@ -6,7 +6,6 @@ import {
   briefsTbl,
   conclusionsTbl,
   personsTbl,
-  referralsTbl,
 } from "../../../constants";
 
 import { convertIConclusionToITableConclusion } from "../helpers";
