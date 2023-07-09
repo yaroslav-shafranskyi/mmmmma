@@ -209,24 +209,24 @@ Promise.all([
   //         // if (res) {
   //         //     return;
   //         // }
-  //         db.schema.createTable(conclusionsTbl, table => {
-  //             table.increments('id').primary();
-  //             table.smallint('personId').notNullable();
-  //             table.string('clinic').notNullable().defaultTo('');
-  //             table.string('code').notNullable().defaultTo(''),
-  //             table.string('department').notNullable().defaultTo(''),
-  //             table.string('orderNumber').notNullable().defaultTo(''),
-  //             table.bigint('orderDate').notNullable();
-  //             table.string('sender').notNullable().defaultTo('');
-  //             table.string('doctor').notNullable().defaultTo('');
-  //             table.string('labResults');
-  //             table.string('researchResults');
-  //             table.string('diagnosis').notNullable().defaultTo('');
-  //             table.string('recommendations');
-  //             table.bigint('date').notNullable().defaultTo(Date.now());
-  //             table.string('headOfTheClinic').notNullable().defaultTo('');
-  //             table.string('signature')
-  //         })
+  // db.schema.createTable(conclusionsTbl, table => {
+  //     table.increments('id').primary();
+  //     table.smallint('personId').notNullable();
+  //     table.string('clinic').notNullable().defaultTo('');
+  //     table.string('code').notNullable().defaultTo(''),
+  //     table.string('department').notNullable().defaultTo(''),
+  //     table.string('orderNumber').notNullable().defaultTo(''),
+  //     table.bigint('orderDate').notNullable();
+  //     table.string('sender').notNullable().defaultTo('');
+  //     table.string('doctor').notNullable().defaultTo('');
+  //     table.string('labResults');
+  //     table.string('researchResults');
+  //     table.string('diagnosis').notNullable().defaultTo('');
+  //     table.string('recommendations');
+  //     table.bigint('date').notNullable().defaultTo(Date.now());
+  //     table.string('headOfTheClinic').notNullable().defaultTo('');
+  //     table.string('signature')
+  // }),
   //         .then(handleCreateSuccess('conclusions'))
   //         .catch(handleCreateError('conclusions'))
   //     })
@@ -234,27 +234,32 @@ Promise.all([
 
   // db.schema
   //   .dropTableIfExists(usersTbl)
-  //   .then(() =>
+  //   .then(async () =>
   //     db.schema
   //       .createTable(usersTbl, (table) => {
-  //         table.increments("id").primary;
+  //         table.increments("id").primary();
   //         table.enum("role", Object.values(UserType));
   //         table.string("user").notNullable();
-  //         table.string("password").notNullable();
   //         table.string("militaryBase");
   //         table.string("fullName");
   //         table.string("clinic");
   //         table.string("signature");
   //         table.string("position");
-  //       })
-  //       .then(handleCreateSuccess('users'))
+  //         table.uuid("password").notNullable().defaultTo(db.raw("uuid_generate_v4()"));
+  //       }).then(
+  //         await db.raw(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`)
+  //       )
+  //       .then(handleCreateSuccess("users"))
   //       .catch(handleCreateError)
   //   )
   //   .catch(handleCheckError),
 
-  db.table(usersTbl).insert({
-    user: "sslavko",
-    role: UserType.SUPER_ADMIN,
-    password: "$gthvjNjrcbrj333",
-  }),
+  // db.table(usersTbl).insert({
+  //   user: "sslavko",
+  //   role: UserType.SUPER_ADMIN,
+  // }),
+
+  // db(usersTbl).select('password').where({ user: 'sslavko' }).then(res => {
+  //   console.log({res})
+  // })
 ]);

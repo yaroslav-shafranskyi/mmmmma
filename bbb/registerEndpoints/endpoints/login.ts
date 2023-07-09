@@ -17,6 +17,7 @@ export const login = async (req: Request, res: Response) => {
         "clinic",
         "signature",
         "position",
+        'id'
       ])
       .where({ user })
       .andWhere({ password });

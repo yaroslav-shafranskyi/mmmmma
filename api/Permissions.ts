@@ -1,7 +1,7 @@
 export enum UserType {
-  USER = "User",
-  ADMIN = "Admin",
-  SUPER_ADMIN = "SuperAdmin",
+  USER = "Базовий",
+  ADMIN = "Адміністратор",
+  SUPER_ADMIN = "Страший адміністратор",
   NONE = "None",
 }
 

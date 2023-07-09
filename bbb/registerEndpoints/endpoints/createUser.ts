@@ -5,10 +5,15 @@ import { usersTbl } from "../../../constants";
 import { IUser } from "../../../api";
 
 export const createUser = async (req: Request, res: Response) => {
-  const { user, password, ...data } = req.body as Omit<IUser, "id">;
+  const data = req.body as Omit<IUser, "id">;
+  const { user } = data;
 
   try {
-    await db(usersTbl).insert(data).where({ user }).andWhere({ password });
+    await db(usersTbl).insert(data);
+
+    const updatedUser = await db(usersTbl).select("password").where({ user });
+
+    return res.json({ password: updatedUser[0]?.password });
   } catch (error) {
     console.error(error);
   }

@@ -13,8 +13,6 @@ export const confirmPassword = async (req: Request, res: Response) => {
       .where({ user })
       .andWhere({ password });
 
-    console.log({ data });
-
     return res.json(data[0]?.count !== "0");
   } catch (error) {
     console.error(error);
