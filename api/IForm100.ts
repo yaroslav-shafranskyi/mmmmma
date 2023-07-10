@@ -52,6 +52,7 @@ export interface IForm100 {
   carriedBy?: string;
   timeAfterAccident?: number;
   firstAidInfo: string;
+  doctorId: number;
 }
 
 type DamageCoordType = { x: number; y: number };

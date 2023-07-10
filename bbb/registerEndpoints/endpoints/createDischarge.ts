@@ -47,7 +47,7 @@ const updatePersonAfterFormCreating = async (
 };
 
 const updateBriefsTableAfterFormCreating = async (
-  formData: Pick<IDischarge, "id" | "date" | "fullDiagnosis">,
+  formData: Pick<IDischarge, "id" | "date" | "fullDiagnosis" | "doctorId">,
   personId: number
 ) => {
   const { id, ...restData } = formData;
@@ -67,10 +67,10 @@ const updateDischargeFormWithNewPersonId = async (
 };
 
 const updateFormsWithPersonId = async (
-  formData: Pick<IDischarge, "id" | "date" | "fullDiagnosis">,
+  formData: Pick<IDischarge, "id" | "date" | "fullDiagnosis" | 'doctorId'>,
   res: Response
 ) => {
-  const { id: formId, date, fullDiagnosis } = formData;
+  const { id: formId, ...data } = formData;
   const newPersonIds = await db(personsTbl)
     .select("id")
     .where({ lastDischargeId: formId })
@@ -83,14 +83,14 @@ const updateFormsWithPersonId = async (
 
   await updateDischargeFormWithNewPersonId(formId, newPersonId);
   await updateBriefsTableAfterFormCreating(
-    { id: formId, fullDiagnosis, date },
+    { id: formId, ...data },
     newPersonId
   );
 };
 
 export const createDischarge = async (req: Request, res: Response) => {
   const { id, ...data } = req.body as IDischarge;
-  const { person, fullDiagnosis, date } = data;
+  const { person, fullDiagnosis, date, doctorId } = data;
 
   const isNewPerson = person.id === -1;
 
@@ -110,7 +110,7 @@ export const createDischarge = async (req: Request, res: Response) => {
 
   await updatePersonAfterFormCreating(person, { ...data, id: newDischargeId });
 
-  const briefData = { id: newDischargeId, fullDiagnosis, date };
+  const briefData = { id: newDischargeId, fullDiagnosis, date, doctorId };
 
   if (!isNewPerson) {
     await updateBriefsTableAfterFormCreating(briefData, person.id);

@@ -16,6 +16,7 @@ export interface IReferral {
   medicalCommander: PositionWithName;
   id: number;
   personId: number;
+  doctorId: number;
 }
 
 export interface ITableReferral

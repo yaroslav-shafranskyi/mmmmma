@@ -18,6 +18,7 @@ export interface IDischarge extends ICommonFormHeaderFields {
     recommendations: string;
     date: number;
     doctor: string;
+    doctorId: number;
 }
 
 export interface ITableDischarge extends Omit<IDischarge, 'person' | 'datesData' | 'order' > {

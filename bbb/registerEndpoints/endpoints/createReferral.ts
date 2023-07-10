@@ -45,7 +45,7 @@ const updatePersonAfterFormCreating = async (
 };
 
 const updateBriefsTableAfterFormCreating = async (
-  formData: Pick<IReferral, "id" | "date" | "diagnosis">,
+  formData: Pick<IReferral, "id" | "date" | "diagnosis" | "doctorId">,
   personId: number
 ) => {
   const { id, diagnosis, ...restData } = formData;
@@ -66,7 +66,7 @@ const updateReferralFormWithNewPersonId = async (
 };
 
 const updateFormsWithPersonId = async (
-  formData: Pick<IReferral, "id" | "date" | "diagnosis">,
+  formData: Pick<IReferral, "id" | "date" | "diagnosis" | "doctorId">,
   res: Response
 ) => {
   const { id: formId } = formData;
@@ -88,7 +88,7 @@ const updateFormsWithPersonId = async (
 export const createReferral = async (req: Request, res: Response) => {
   const form = req.body as Omit<IReferral, "id">;
 
-  const { personId, date, patient, diagnosis } = form;
+  const { personId, date, patient, diagnosis, doctorId } = form;
 
   const isNewPerson = personId === -1;
 
@@ -106,7 +106,7 @@ export const createReferral = async (req: Request, res: Response) => {
       return res.end();
     }
 
-    const briefData = { id: newFormId, date, diagnosis };
+    const briefData = { id: newFormId, date, diagnosis, doctorId };
 
     await updatePersonAfterFormCreating({
       personId,

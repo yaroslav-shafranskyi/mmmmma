@@ -23,3 +23,4 @@ export * from "./QueryPersonsData";
 export * from "./IQuery";
 export * from "./Permissions";
 export * from "./IUser";
+export * from './IGetFormPayload';

@@ -1,12 +1,9 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 
 import { db } from "../../init";
 import { usersTbl } from "../../../constants";
-import { IAuthorizationRequest, IUser } from "../../../api";
 
-export const getUser = async (req: Request, res: Response) => {
-  const { user, password } = req.body as IAuthorizationRequest;
-
+export const getUser = async (id: number) => {
   try {
     const data = await db(usersTbl)
       .select([
@@ -19,10 +16,9 @@ export const getUser = async (req: Request, res: Response) => {
         "position",
         "id",
       ])
-      .where({ user })
-      .orWhere({ password });
+      .where({ id });
 
-    return res.json(data[0]);
+    return data[0];
   } catch (error) {
     console.error(error);
   }

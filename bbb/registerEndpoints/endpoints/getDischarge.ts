@@ -2,10 +2,14 @@ import { Request, Response } from "express";
 
 import { db } from "../../init";
 import { dischargesTbl, personsTbl } from "../../../constants";
+import { IGetFormPayload, IUserBrief } from "../../../api";
+
 import {
   convertITableDischargeToIDischarge,
   convertTablePersonToIPerson,
 } from "../helpers";
+
+import { getUser } from "./getUser";
 
 const getPersonData = async (personId: number) => {
   const data = await db(personsTbl)
@@ -24,12 +28,18 @@ const getPersonData = async (personId: number) => {
   return data[0];
 };
 
-const getBlankDischarge = async (personId: number, res: Response) => {
+const getBlankDischarge = async (
+  personId: number,
+  doctorId: number,
+  res: Response
+) => {
   const data = await getPersonData(personId);
+  const { fullName: doctor } = (await getUser(doctorId)) as IUserBrief;
   return res.json({
     person: {
       ...convertTablePersonToIPerson(data),
       id: personId,
+      doctor,
     },
   });
 };
@@ -58,10 +68,11 @@ const getFilledDischarge = async (
 };
 
 export const getDischarge = async (req: Request, res: Response) => {
-  const { id: stringId, personId: stringPersonId } = req.body as {
-    id: string;
-    personId: string;
-  };
+  const {
+    id: stringId,
+    personId: stringPersonId,
+    doctorId: stringDoctorId,
+  } = req.body as IGetFormPayload;
 
   const isCreateMode = stringId === undefined || stringId === "create";
   const doesPersonExist =
@@ -69,14 +80,16 @@ export const getDischarge = async (req: Request, res: Response) => {
 
   const id = +stringId;
   const personId = +stringPersonId;
+  const doctorId = +stringDoctorId;
 
   try {
     if (!doesPersonExist) {
-      return res.json(undefined);
+      const { fullName: doctor } = await getUser(doctorId) as IUserBrief;
+      return res.json({ doctor });
     }
 
     if (isCreateMode) {
-      return await getBlankDischarge(personId, res);
+      return await getBlankDischarge(personId, doctorId, res);
     }
 
     await getFilledDischarge(id, personId, res);

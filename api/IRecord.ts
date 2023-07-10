@@ -27,6 +27,7 @@ export interface IBriefRecord {
 export interface IResponseBriefRecord extends IBriefRecord {
     formId: number;
     personId: number;
+    doctorId: number;
 }
 
 export interface ILastRecords {

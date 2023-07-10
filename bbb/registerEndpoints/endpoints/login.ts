@@ -10,14 +10,18 @@ export const login = async (req: Request, res: Response) => {
   try {
     const data = await db(usersTbl)
       .select([
-        "user",
+        "id",
         "role",
         "fullName",
         "militaryBase",
         "clinic",
         "signature",
         "position",
-        'id'
+        "user",
+        "phone",
+        "email",
+        "rank",
+        "subdivision",
       ])
       .where({ user })
       .andWhere({ password });

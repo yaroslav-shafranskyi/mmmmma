@@ -56,11 +56,11 @@ const updateForm100PersonId = async (formId: number, personId: number) => {
 const updateBriefsTableAfterFormCreating = async (
   formData: Pick<
     IForm100,
-    "id" | "accidentTime" | "diagnosis" | "fullDiagnosis"
+    "id" | "accidentTime" | "diagnosis" | "fullDiagnosis" | "doctorId"
   >,
   personId: number
 ) => {
-  const { id, accidentTime, fullDiagnosis, diagnosis } = formData;
+  const { id, accidentTime, fullDiagnosis, diagnosis, doctorId } = formData;
 
   await db(briefsTbl).insert({
     type: Forms.FORM_100,
@@ -68,17 +68,24 @@ const updateBriefsTableAfterFormCreating = async (
     fullDiagnosis: fullDiagnosis ?? diagnosis,
     formId: id,
     personId,
+    doctorId,
   });
 };
 
 const updateFormsWithPersonId = async (
   formData: Pick<
     IForm100,
-    "id" | "diagnosis" | "fullDiagnosis" | "accidentTime"
+    "id" | "diagnosis" | "fullDiagnosis" | "accidentTime" | "doctorId"
   >,
   res: Response
 ) => {
-  const { id: newForm100Id, accidentTime, diagnosis, fullDiagnosis } = formData;
+  const {
+    id: newForm100Id,
+    accidentTime,
+    diagnosis,
+    fullDiagnosis,
+    doctorId,
+  } = formData;
 
   const newPersonIds = await db(personsTbl)
     .select("id")
@@ -99,6 +106,7 @@ const updateFormsWithPersonId = async (
       accidentTime,
       diagnosis,
       fullDiagnosis,
+      doctorId,
     },
     newPersonId
   );
@@ -111,6 +119,7 @@ export const createForm100 = async (req: Request, res: Response) => {
     accidentTime,
     diagnosis,
     fullDiagnosis,
+    doctorId
   }: Omit<IForm100, "id"> = req.body;
 
   const personId = person.id;
@@ -137,6 +146,7 @@ export const createForm100 = async (req: Request, res: Response) => {
     diagnosis,
     fullDiagnosis,
     accidentTime,
+    doctorId
   };
 
   if (!isNewPerson) {

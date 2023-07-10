@@ -2,7 +2,11 @@ import { Request, Response } from "express";
 
 import { db } from "../../init";
 import { conclusionsTbl, personsTbl } from "../../../constants";
+import { IGetFormPayload, IUser } from "../../../api";
+
 import { convertITableConclusionToIConclusion } from "../helpers";
+import { getUser } from "./getUser";
+import { convertUserDataToConclusionDoctorData } from "../helpers/converters/convertUserDataToConclusionDoctorData";
 
 const getPersonData = async (id: number) => {
   const data = await db(personsTbl)
@@ -12,13 +16,21 @@ const getPersonData = async (id: number) => {
   return data[0];
 };
 
-const getBlankConclusion = async (personId: number, res: Response) => {
-  const data = await getPersonData(personId);
+const getBlankConclusion = async (
+  personId: number,
+  doctorId: number,
+  res: Response
+) => {
+  const personData = await getPersonData(personId);
+
+  const doctorData = await getUser(doctorId);
+
   return res.json({
     person: {
-      ...data,
+      ...personData,
       id: personId,
     },
+    ...convertUserDataToConclusionDoctorData(doctorData)
   });
 };
 
@@ -46,10 +58,11 @@ const getFilledConclusion = async (
 };
 
 export const getConclusion = async (req: Request, res: Response) => {
-  const { id: stringId, personId: stringPersonId } = req.body as {
-    id: string;
-    personId: string;
-  };
+  const {
+    id: stringId,
+    personId: stringPersonId,
+    doctorId: stringDoctorId,
+  } = req.body as IGetFormPayload;
 
   const isCreateMode = stringId === undefined || stringId === "create";
   const doesPersonExist =
@@ -57,14 +70,16 @@ export const getConclusion = async (req: Request, res: Response) => {
 
   const id = +stringId;
   const personId = +stringPersonId;
+  const doctorId = +stringDoctorId;
 
   try {
     if (!doesPersonExist) {
-      return res.json();
+      const doctorData = await getUser(doctorId);
+      return res.json(convertUserDataToConclusionDoctorData(doctorData));
     }
 
     if (isCreateMode) {
-      return await getBlankConclusion(personId, res);
+      return await getBlankConclusion(personId, doctorId, res);
     }
 
     if (!isCreateMode) {

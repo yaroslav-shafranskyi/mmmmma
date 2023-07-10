@@ -17,9 +17,9 @@ export * from "./getConclusion";
 export * from "./createConclusion";
 
 export * from "./login";
-export * from './confirmPassword';
+export * from "./confirmPassword";
 
 export * from "./createUser";
 export * from "./updateUser";
-export * from './queryUsers';
-export * from './getUser';
+export * from "./queryUsers";
+export * from "./getUser";

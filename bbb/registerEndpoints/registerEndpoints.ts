@@ -33,7 +33,6 @@ import {
   createUser,
   updateUser,
   queryUsers,
-  getUser,
 } from "./endpoints";
 import { deleteUser } from "./endpoints/deleteUser";
 
@@ -59,7 +58,6 @@ export const registerEndpoints = () => {
   app.post(`${serviceUrl}${loginUrl}`, login);
   app.post(`${serviceUrl}${loginUrl}/confirm`, confirmPassword);
 
-  app.post(`${serviceUrl}${userUrl}${getUrl}`, getUser);
   app.post(`${serviceUrl}${userUrl}${createUrl}`, createUser);
   app.post(`${serviceUrl}${userUrl}${updateUrl}`, updateUser);
   app.post(`${serviceUrl}${userUrl}/query`, queryUsers);

@@ -2,11 +2,7 @@ import { Request, Response } from "express";
 
 import { Forms, IConclusion } from "../../../api";
 import { db } from "../../init";
-import {
-  briefsTbl,
-  conclusionsTbl,
-  personsTbl,
-} from "../../../constants";
+import { briefsTbl, conclusionsTbl, personsTbl } from "../../../constants";
 
 import { convertIConclusionToITableConclusion } from "../helpers";
 
@@ -41,7 +37,7 @@ const updatePersonAfterFormCreating = async (
 };
 
 const updateBriefsTableAfterFormCreating = async (
-  formData: Pick<IConclusion, "id" | "date" | "diagnosis">,
+  formData: Pick<IConclusion, "id" | "date" | "diagnosis" | "doctorId">,
   personId: number
 ) => {
   const { id, diagnosis, ...restData } = formData;
@@ -62,7 +58,7 @@ const updateConclusionWithNewPersonId = async (
 };
 
 const updateFormsWithPersonId = async (
-  formData: Pick<IConclusion, "id" | "date" | "diagnosis">,
+  formData: Pick<IConclusion, "id" | "date" | "diagnosis" | "doctorId">,
   res: Response
 ) => {
   const { id: formId } = formData;
@@ -85,7 +81,7 @@ const updateFormsWithPersonId = async (
 export const createConclusion = async (req: Request, res: Response) => {
   const form = req.body as Omit<IConclusion, "id">;
 
-  const { person, date, diagnosis } = form;
+  const { person, date, diagnosis, doctorId } = form;
 
   const personId = person.id;
   const isNewPerson = personId === -1;
@@ -96,7 +92,7 @@ export const createConclusion = async (req: Request, res: Response) => {
     const formsIds = await db(conclusionsTbl)
       .select("id")
       .where({ personId })
-      .orderBy("date", "desc")
+      .orderBy("date", "desc");
 
     const newFormId = formsIds[0]?.id;
 
@@ -104,7 +100,7 @@ export const createConclusion = async (req: Request, res: Response) => {
       return res.end();
     }
 
-    const briefData = { id: newFormId, date, diagnosis };
+    const briefData = { id: newFormId, date, diagnosis, doctorId };
 
     await updatePersonAfterFormCreating({ person, ...briefData });
 
