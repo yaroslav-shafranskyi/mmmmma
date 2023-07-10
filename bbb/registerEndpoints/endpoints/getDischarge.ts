@@ -40,6 +40,7 @@ const getBlankDischarge = async (
       ...convertTablePersonToIPerson(data),
       id: personId,
       doctor,
+      doctorId,
     },
   });
 };
@@ -85,7 +86,7 @@ export const getDischarge = async (req: Request, res: Response) => {
   try {
     if (!doesPersonExist) {
       const { fullName: doctor } = await getUser(doctorId) as IUserBrief;
-      return res.json({ doctor });
+      return res.json({ doctor, doctorId });
     }
 
     if (isCreateMode) {

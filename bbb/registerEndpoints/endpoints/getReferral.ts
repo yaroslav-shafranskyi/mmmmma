@@ -29,6 +29,7 @@ const getBlankReferral = async (
       position,
     },
     rank,
+    doctorId,
   });
 };
 
@@ -62,9 +63,8 @@ export const getReferral = async (req: Request, res: Response) => {
 
   try {
     if (!doesPersonExist) {
-      const { militaryBase, fullName, position, rank } = await getUser(
-        doctorId
-      );
+      const { militaryBase, fullName, position, rank } =
+        (await getUser(doctorId)) ?? {};
       return res.json({
         militaryBase,
         medicalCommander: {
@@ -72,6 +72,7 @@ export const getReferral = async (req: Request, res: Response) => {
           position,
         },
         rank,
+        doctorId,
       });
     }
 

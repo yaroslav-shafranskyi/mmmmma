@@ -1,1 +1,2 @@
-export * from './queryPersonsFields';
+export * from "./queryPersonsFields";
+export * from "./queryBriefsFields";

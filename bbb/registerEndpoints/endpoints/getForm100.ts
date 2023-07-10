@@ -41,6 +41,7 @@ const getBlankForm100 = async (
     author,
     clinic,
     signature,
+    doctorId,
   });
 };
 
@@ -90,7 +91,7 @@ export const getForm100 = async (req: Request, res: Response) => {
         signature,
         militaryBase,
       } = await getUser(doctorId);
-      return res.json({ author, clinic, signature, militaryBase });
+      return res.json({ author, clinic, signature, militaryBase, doctorId });
     }
 
     if (isCreateMode) {

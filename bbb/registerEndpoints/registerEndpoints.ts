@@ -10,6 +10,7 @@ import {
   conclusionUrl,
   loginUrl,
   userUrl,
+  briefsUrl,
 } from "../../constants";
 
 import { app } from "../index";
@@ -35,6 +36,7 @@ import {
   queryUsers,
 } from "./endpoints";
 import { deleteUser } from "./endpoints/deleteUser";
+import { queryBriefs } from "./endpoints/queryBriefs";
 
 export const registerEndpoints = () => {
   app.post(`${serviceUrl}${personsUrl}`, queryPersons);
@@ -62,4 +64,6 @@ export const registerEndpoints = () => {
   app.post(`${serviceUrl}${userUrl}${updateUrl}`, updateUser);
   app.post(`${serviceUrl}${userUrl}/query`, queryUsers);
   app.post(`${serviceUrl}${userUrl}/delete`, deleteUser);
+
+  app.post(`${serviceUrl}${briefsUrl}`, queryBriefs)
 };

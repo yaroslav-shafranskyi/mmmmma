@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { Forms, IForm100, IPerson, IResponseBriefRecord } from "../../../api";
+import { Forms, IForm100, IPerson } from "../../../api";
 import { db } from "../../init";
 import { personsTbl, forms100Tbl, briefsTbl } from "../../../constants";
 

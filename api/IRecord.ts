@@ -18,13 +18,13 @@ export type IReferralRecord = Omit<IReferral, 'personId'>;
 export type IConclusionRecord = Omit<IConclusion, 'person'>
 
 export interface IBriefRecord {
-    date: Date;
+    date: number;
     fullDiagnosis: string;
     id: number;
     type: Forms;
 }
 
-export interface IResponseBriefRecord extends IBriefRecord {
+export interface ITableBriefRecord extends IBriefRecord {
     formId: number;
     personId: number;
     doctorId: number;
