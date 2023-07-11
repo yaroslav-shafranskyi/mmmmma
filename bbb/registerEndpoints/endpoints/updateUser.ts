@@ -5,7 +5,7 @@ import { usersTbl } from "../../../constants";
 import { IUser } from "../../../api";
 
 export const updateUser = async (req: Request, res: Response) => {
-  const data = req.body as Pick<IUser, "id" | "role">;
+  const data = req.body as IUser;
   const { id } = data;
 
   try {

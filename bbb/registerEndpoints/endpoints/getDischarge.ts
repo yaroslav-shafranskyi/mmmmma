@@ -34,13 +34,16 @@ const getBlankDischarge = async (
   res: Response
 ) => {
   const data = await getPersonData(personId);
-  const { fullName: doctor } = (await getUser(doctorId)) as IUserBrief;
+  const { fullName: doctor, signature } = (await getUser(
+    doctorId
+  )) as IUserBrief;
   return res.json({
     person: {
       ...convertTablePersonToIPerson(data),
       id: personId,
       doctor,
       doctorId,
+      signature,
     },
   });
 };
@@ -77,16 +80,18 @@ export const getDischarge = async (req: Request, res: Response) => {
 
   const isCreateMode = stringId === undefined || stringId === "create";
   const doesPersonExist =
-    stringPersonId !== undefined && stringPersonId !== undefined;
+    stringPersonId !== undefined && stringPersonId !== "create";
 
-  const id = +stringId;
-  const personId = +stringPersonId;
+  const id = isCreateMode ? -1 : +stringId;
+  const personId = doesPersonExist ? -1 : +stringPersonId;
   const doctorId = +stringDoctorId;
 
   try {
     if (!doesPersonExist) {
-      const { fullName: doctor } = await getUser(doctorId) as IUserBrief;
-      return res.json({ doctor, doctorId });
+      const { fullName: doctor, signature } = (await getUser(
+        doctorId
+      )) as IUserBrief;
+      return res.json({ doctor, doctorId, signature });
     }
 
     if (isCreateMode) {

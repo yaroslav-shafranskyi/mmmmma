@@ -67,193 +67,194 @@ Promise.all([
   //     })
   //     .catch(handleCheckError('persons')),
 
-  db.schema
-    .dropTableIfExists(forms100Tbl)
-    .then((res) => {
-      // if (res) {
-      //     return;
-      // }
-      db.schema
-        .createTable(forms100Tbl, (table) => {
-          table.increments("id").primary();
-          table.string("clinic").notNullable().defaultTo("");
-          table.string("author").notNullable().defaultTo("");
-          table.smallint("personId").notNullable();
-          table.smallint("doctorId").notNullable();
-          table.bigint("date").notNullable().defaultTo(Date.now());
-          table.bigint("accidentTime").notNullable();
-          table
-            .enum("reason", Object.values(RecordType))
-            .notNullable()
-            .defaultTo("");
-          Object.keys(BodyDamageInfo).forEach((key) => {
-            table.boolean(key);
-          });
-          table.boolean("firearm");
-          table.boolean("nuclear");
-          table.boolean("chemical");
-          table.boolean("biological");
-          table.boolean("other");
-          table.boolean("hypothermia");
-          table.boolean("illness");
-          table.boolean("infection");
-          table.boolean("mechanical");
-          table.boolean("reactive");
-          table.string("antibiotic");
-          table.string("serum");
-          table.string("toxoid");
-          table.string("antidote");
-          table.string("painReliever");
-          table.boolean("bloodTransfusion");
-          table.boolean("bloodSubstitute");
-          table.boolean("immobilization");
-          table.boolean("dressing");
-          table.boolean("bandage");
-          table.boolean("sanitary");
-          table.boolean("additionalInfo");
-          table.bigint("plait");
-          table.enum(
-            "sanitaryTreatment",
-            Object.values(SanitaryTreatmentStatus)
-          );
-          table.enum("evacuationTransport", Object.values(EvacuationTransport));
-          table.enum("evacuationType", Object.values(EvacuationType));
-          table
-            .json("evacuationClinics")
-            .notNullable()
-            .defaultTo(JSON.stringify({}));
-          table.enum("evacuationPriority", ["I", "II", "III"]);
-          table.string("diagnosis").notNullable().defaultTo("");
-          table.string("stage").notNullable().defaultTo("");
-          table.string("signature");
-          table.string("fullDiagnosis").notNullable().defaultTo("");
-          table.string("treatmentInfo").notNullable().defaultTo("");
-          table.jsonb("damageCoords");
-          table.string("fullEvacuationInfo").notNullable().defaultTo("");
-          table.string("result").notNullable().defaultTo("");
-          table.boolean("selfLeave");
-          table.string("carriedBy");
-          table.integer("timeAfterAccident");
-          table.string("firstAidInfo").notNullable().defaultTo("");
-        })
-        .then(handleCreateSuccess("forms100"))
-        .catch(handleCreateError("forms100"));
-    })
-    .catch(handleCheckError("forms100")),
+  // db.schema
+  //   .dropTableIfExists(forms100Tbl)
+  //   .then((res) => {
+  //     // if (res) {
+  //     //     return;
+  //     // }
+  //     db.schema
+  //       .createTable(forms100Tbl, (table) => {
+  //         table.increments("id").primary();
+  //         table.string("clinic").notNullable().defaultTo("");
+  //         table.string("author").notNullable().defaultTo("");
+  //         table.smallint("personId").notNullable();
+  //         table.smallint("doctorId").notNullable();
+  //         table.bigint("date").notNullable().defaultTo(Date.now());
+  //         table.bigint("accidentTime").notNullable();
+  //         table
+  //           .enum("reason", Object.values(RecordType))
+  //           .notNullable()
+  //           .defaultTo("");
+  //         Object.keys(BodyDamageInfo).forEach((key) => {
+  //           table.boolean(key);
+  //         });
+  //         table.boolean("firearm");
+  //         table.boolean("nuclear");
+  //         table.boolean("chemical");
+  //         table.boolean("biological");
+  //         table.boolean("other");
+  //         table.boolean("hypothermia");
+  //         table.boolean("illness");
+  //         table.boolean("infection");
+  //         table.boolean("mechanical");
+  //         table.boolean("reactive");
+  //         table.string("antibiotic");
+  //         table.string("serum");
+  //         table.string("toxoid");
+  //         table.string("antidote");
+  //         table.string("painReliever");
+  //         table.boolean("bloodTransfusion");
+  //         table.boolean("bloodSubstitute");
+  //         table.boolean("immobilization");
+  //         table.boolean("dressing");
+  //         table.boolean("bandage");
+  //         table.boolean("sanitary");
+  //         table.boolean("additionalInfo");
+  //         table.bigint("plait");
+  //         table.enum(
+  //           "sanitaryTreatment",
+  //           Object.values(SanitaryTreatmentStatus)
+  //         );
+  //         table.enum("evacuationTransport", Object.values(EvacuationTransport));
+  //         table.enum("evacuationType", Object.values(EvacuationType));
+  //         table
+  //           .json("evacuationClinics")
+  //           .notNullable()
+  //           .defaultTo(JSON.stringify({}));
+  //         table.enum("evacuationPriority", ["I", "II", "III"]);
+  //         table.string("diagnosis").notNullable().defaultTo("");
+  //         table.string("stage").notNullable().defaultTo("");
+  //         table.string("signature", 1000000);
+  //         table.string("fullDiagnosis").notNullable().defaultTo("");
+  //         table.string("treatmentInfo").notNullable().defaultTo("");
+  //         table.jsonb("damageCoords");
+  //         table.string("fullEvacuationInfo").notNullable().defaultTo("");
+  //         table.string("result").notNullable().defaultTo("");
+  //         table.boolean("selfLeave");
+  //         table.string("carriedBy");
+  //         table.integer("timeAfterAccident");
+  //         table.string("firstAidInfo").notNullable().defaultTo("");
+  //       })
+  //       .then(handleCreateSuccess("forms100"))
+  //       .catch(handleCreateError("forms100"));
+  //   })
+  //   .catch(handleCheckError("forms100")),
 
-  db.schema
-    .dropTableIfExists(briefsTbl)
-    .then((res) => {
-      // if (res) {
-      //     return;
-      // }
-      db.schema
-        .createTable(briefsTbl, (table) => {
-          table.increments("id").primary();
-          table.bigint("date").notNullable();
-          table.string("fullDiagnosis").notNullable().defaultTo("");
-          table.enum("type", Object.values(Forms));
-          table.smallint("personId").notNullable();
-          table.smallint("formId").notNullable();
-          table.smallint("doctorId").notNullable();
-        })
-        .then(handleCreateSuccess("briefs"))
-        .catch(handleCreateError("briefs"));
-    })
-    .catch(handleCheckError("briefs")),
+  // db.schema
+  //   .dropTableIfExists(briefsTbl)
+  //   .then((res) => {
+  //     // if (res) {
+  //     //     return;
+  //     // }
+  //     db.schema
+  //       .createTable(briefsTbl, (table) => {
+  //         table.increments("id").primary();
+  //         table.bigint("date").notNullable();
+  //         table.string("fullDiagnosis").notNullable().defaultTo("");
+  //         table.enum("type", Object.values(Forms));
+  //         table.smallint("personId").notNullable();
+  //         table.smallint("formId").notNullable();
+  //         table.smallint("doctorId").notNullable();
+  //       })
+  //       .then(handleCreateSuccess("briefs"))
+  //       .catch(handleCreateError("briefs"));
+  //   })
+  //   .catch(handleCheckError("briefs")),
 
-  db.schema
-    .dropTableIfExists(dischargesTbl)
-    .then((res) => {
-      // if (res) {
-      //     return;
-      // }
-      db.schema
-        .createTable(dischargesTbl, (table) => {
-          table.increments("id").primary();
-          table.smallint("personId").notNullable();
-          table.smallint("doctorId").notNullable();
-          table.string("clinic").notNullable().defaultTo("");
-          table.string("code").notNullable().defaultTo(""),
-            table.string("department").notNullable().defaultTo(""),
-            table.string("orderNumber").notNullable().defaultTo(""),
-            table.bigint("orderDate").notNullable();
-          table.string("receiver").notNullable().defaultTo("");
-          table.enum("reason", Object.values(DischargeReason)).notNullable();
-          table.bigint("sickDate").notNullable();
-          table.bigint("referralDate").notNullable();
-          table.bigint("arrivalDate").notNullable();
-          table.bigint("leavingDate").notNullable();
-          table.string("fullDiagnosis").notNullable().defaultTo("");
-          table.string("info").notNullable().defaultTo("");
-          table.string("recommendations").notNullable().defaultTo("");
-          table.bigint("date").notNullable().defaultTo(Date.now());
-          table.string("doctor").notNullable().defaultTo("");
-        })
-        .then(handleCreateSuccess("discharges"))
-        .catch(handleCreateError("discharges"));
-    })
-    .catch(handleCheckError("discharges")),
+  // db.schema
+  //   .dropTableIfExists(dischargesTbl)
+  //   .then((res) => {
+  //     // if (res) {
+  //     //     return;
+  //     // }
+  //     db.schema
+  //       .createTable(dischargesTbl, (table) => {
+  //         table.increments("id").primary();
+  //         table.smallint("personId").notNullable();
+  //         table.smallint("doctorId").notNullable();
+  //         table.string("clinic").notNullable().defaultTo("");
+  //         table.string("code").notNullable().defaultTo(""),
+  //           table.string("department").notNullable().defaultTo(""),
+  //           table.string("orderNumber").notNullable().defaultTo(""),
+  //           table.bigint("orderDate").notNullable();
+  //         table.string("receiver").notNullable().defaultTo("");
+  //         table.enum("reason", Object.values(DischargeReason)).notNullable();
+  //         table.bigint("sickDate").notNullable();
+  //         table.bigint("referralDate").notNullable();
+  //         table.bigint("arrivalDate").notNullable();
+  //         table.bigint("leavingDate").notNullable();
+  //         table.string("fullDiagnosis").notNullable().defaultTo("");
+  //         table.string("info").notNullable().defaultTo("");
+  //         table.string("recommendations").notNullable().defaultTo("");
+  //         table.bigint("date").notNullable().defaultTo(Date.now());
+  //         table.string("doctor").notNullable().defaultTo("");
+  //         table.string("signature", 1000000);
+  //       })
+  //       .then(handleCreateSuccess("discharges"))
+  //       .catch(handleCreateError("discharges"));
+  //   })
+  //   .catch(handleCheckError("discharges")),
 
-  db.schema
-    .dropTableIfExists(referralsTbl)
-    .then((res) => {
-      // if (res) {
-      //     return;
-      // }
-      db.schema
-        .createTable(referralsTbl, (table) => {
-          table.increments("id").primary();
-          table.smallint("personId").notNullable();
-          table.smallint("doctorId").notNullable();
-          table.string("militaryBase").notNullable().defaultTo("");
-          table.string("code").notNullable().defaultTo("");
-          table.bigint("date").notNullable().defaultTo(Date.now());
-          table.string("militaryBaseAddress").notNullable().defaultTo("");
-          table.string("number").notNullable().defaultTo("");
-          table.string("receiver").notNullable().defaultTo("");
-          table.string("patient").notNullable().defaultTo("");
-          table.string("diagnosis").notNullable().defaultTo("");
-          table.string("commanderName").notNullable().defaultTo("");
-          table.string("commanderPosition").notNullable();
-          table.string("medicalCommanderName").notNullable().defaultTo("");
-          table.string("medicalCommanderPosition").notNullable().defaultTo("");
-        })
-        .then(handleCreateSuccess("referrals"))
-        .catch(handleCreateError("referrals"));
-    })
-    .catch(handleCheckError("referrals")),
+  // db.schema
+  //   .dropTableIfExists(referralsTbl)
+  //   .then((res) => {
+  //     // if (res) {
+  //     //     return;
+  //     // }
+  //     db.schema
+  //       .createTable(referralsTbl, (table) => {
+  //         table.increments("id").primary();
+  //         table.smallint("personId").notNullable();
+  //         table.smallint("doctorId").notNullable();
+  //         table.string("militaryBase").notNullable().defaultTo("");
+  //         table.string("code").notNullable().defaultTo("");
+  //         table.bigint("date").notNullable().defaultTo(Date.now());
+  //         table.string("militaryBaseAddress").notNullable().defaultTo("");
+  //         table.string("number").notNullable().defaultTo("");
+  //         table.string("receiver").notNullable().defaultTo("");
+  //         table.string("patient").notNullable().defaultTo("");
+  //         table.string("diagnosis").notNullable().defaultTo("");
+  //         table.string("commanderName").notNullable().defaultTo("");
+  //         table.string("commanderPosition").notNullable();
+  //         table.string("medicalCommanderName").notNullable().defaultTo("");
+  //         table.string("medicalCommanderPosition").notNullable().defaultTo("");
+  //       })
+  //       .then(handleCreateSuccess("referrals"))
+  //       .catch(handleCreateError("referrals"));
+  //   })
+  //   .catch(handleCheckError("referrals")),
 
-  db.schema
-    .dropTableIfExists(conclusionsTbl)
-    .then((res) => {
-      // if (res) {
-      //     return;
-      // }
-      db.schema
-        .createTable(conclusionsTbl, (table) => {
-          table.increments("id").primary();
-          table.smallint("personId").notNullable();
-          table.smallint("doctorId").notNullable();
-          table.string("clinic").notNullable().defaultTo("");
-          table.string("code").notNullable().defaultTo(""),
-            table.string("department").notNullable().defaultTo(""),
-            table.string("orderNumber").notNullable().defaultTo(""),
-            table.bigint("orderDate").notNullable();
-          table.string("sender").notNullable().defaultTo("");
-          table.string("doctor").notNullable().defaultTo("");
-          table.string("labResults");
-          table.string("researchResults");
-          table.string("diagnosis").notNullable().defaultTo("");
-          table.string("recommendations");
-          table.bigint("date").notNullable().defaultTo(Date.now());
-          table.string("headOfTheClinic").notNullable().defaultTo("");
-          table.string("signature");
-        })
-        .then(handleCreateSuccess("conclusions"))
-        .catch(handleCreateError("conclusions"));
-    })
-    .catch(handleCheckError("conclusions")),
+  // db.schema
+  //   .dropTableIfExists(conclusionsTbl)
+  //   .then((res) => {
+  //     // if (res) {
+  //     //     return;
+  //     // }
+  //     db.schema
+  //       .createTable(conclusionsTbl, (table) => {
+  //         table.increments("id").primary();
+  //         table.smallint("personId").notNullable();
+  //         table.smallint("doctorId").notNullable();
+  //         table.string("clinic").notNullable().defaultTo("");
+  //         table.string("code").notNullable().defaultTo(""),
+  //           table.string("department").notNullable().defaultTo(""),
+  //           table.string("orderNumber").notNullable().defaultTo(""),
+  //           table.bigint("orderDate").notNullable();
+  //         table.string("sender").notNullable().defaultTo("");
+  //         table.string("doctor").notNullable().defaultTo("");
+  //         table.string("labResults");
+  //         table.string("researchResults");
+  //         table.string("diagnosis").notNullable().defaultTo("");
+  //         table.string("recommendations");
+  //         table.bigint("date").notNullable().defaultTo(Date.now());
+  //         table.string("headOfTheClinic").notNullable().defaultTo("");
+  //         table.string("signature", 1000000);
+  //       })
+  //       .then(handleCreateSuccess("conclusions"))
+  //       .catch(handleCreateError("conclusions"));
+  //   })
+  //   .catch(handleCheckError("conclusions")),
 
   // db.schema
   //   .dropTableIfExists(usersTbl)
@@ -266,7 +267,7 @@ Promise.all([
   //         table.string("militaryBase");
   //         table.string("fullName");
   //         table.string("clinic");
-  //         table.string("signature");
+  //         table.string("signature", 1000000);
   //         table.string("position");
   //         table
   //           .uuid("password")
