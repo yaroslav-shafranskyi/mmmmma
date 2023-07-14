@@ -24,3 +24,4 @@ export * from "./IQuery";
 export * from "./Permissions";
 export * from "./IUser";
 export * from './IGetFormPayload';
+export * from './CorpsType';

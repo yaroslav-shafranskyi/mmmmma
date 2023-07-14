@@ -1,8 +1,11 @@
 export enum UserType {
-  USER = "Базовий",
-  ADMIN = "Адміністратор",
-  SUPER_ADMIN = "Страший адміністратор",
-  NONE = "None",
+  USER = "Лікар",
+  SUBDIVISION = "Лікар батальйону",
+  MILITARY_BASE = 'Бригадний лікар',
+  CORPS = 'Старший лікар роду військ',
+  MAIN = 'Головний лікар',
+  SUPER_ADMIN = "Старший Адміністратор",
+  NONE = "Без доступу",
 }
 
 export interface IAuthorizationResponse {

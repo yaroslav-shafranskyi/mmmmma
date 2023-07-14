@@ -1,3 +1,4 @@
+import { CorpsDataType } from "./CorpsType";
 import { UserType } from "./Permissions";
 import { Rank } from "./Rank";
 
@@ -15,6 +16,7 @@ export interface IUser {
   email?: string;
   rank?: Rank;
   subdivision?: string;
+  corps?: CorpsDataType;
 }
 
 export type IUserBrief = Omit<IUser, "password">;
